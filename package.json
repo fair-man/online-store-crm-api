@@ -15,9 +15,7 @@
     "joi": "^14.3.1",
     "morgan": "~1.9.0",
     "nconf": "^0.10.0",
-    "pg-promise": "^8.5.4"
-  },
-  "devDependencies": {
+    "pg-promise": "^8.5.4",
     "moment": "^2.24.0"
   }
 }
