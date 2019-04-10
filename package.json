@@ -1,0 +1,23 @@
+{
+  "name": "online-store-crm-api",
+  "version": "1.0.0",
+  "private": false,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "connect-pg-simple": "^5.0.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "dotenv": "^6.1.0",
+    "express": "~4.16.0",
+    "express-session": "^1.15.6",
+    "joi": "^14.3.1",
+    "morgan": "~1.9.0",
+    "nconf": "^0.10.0",
+    "pg-promise": "^8.5.4"
+  },
+  "devDependencies": {
+    "moment": "^2.24.0"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "PORT": 3000,
+  "postresql": {
+    "uri": ""
+  },
+  "mailer": {
+    "e-mail": null,
+    "host": null,
+    "port": null,
+    "secure": false,
+    "auth": {
+      "user": "",
+      "pass": ""
+    }
+  },
+  "session": {
+    "secret": "",
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "maxAge": null
+    }
+  }
+}
