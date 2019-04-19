@@ -20,7 +20,7 @@ var authRouter = require('./routes/auth/login');
 var app = express();
 
 app.use(cors({
-  origin: process.env.ALLOW_ORIGIN_ADMIN_DEV || process.env.ALLOW_ORIGIN_ADMIN_PROD,
+  origin: req.get('origin'),
   credentials: true
 }));
 
