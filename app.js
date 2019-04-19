@@ -1,5 +1,6 @@
 require('dotenv').config();
 var express = require('express');
+var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -47,7 +48,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.enable('trust proxy');
+app.use(cors());
 app.use(authorize);
 
 app.use(logger('dev'));
