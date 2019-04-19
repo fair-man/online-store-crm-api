@@ -1,11 +1,9 @@
 require('dotenv').config();
 var express = require('express');
-var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var router = express.Router();
-var cors = require('cors');
 
 var config = require('./config');
 var session = require('express-session');
@@ -18,11 +16,6 @@ var usersRouter = require('./routes/user/user');
 var authRouter = require('./routes/auth/login');
 
 var app = express();
-
-app.use(cors({
-  origin: 'https://online-store-admin.herokuapp.com',
-  credentials: true
-}));
 
 app.use(session({
   cookie: config.get('session.cookie'),
@@ -41,13 +34,12 @@ app.use(function (req, res, next) {
   // if (process.env.ALLOW_ORIGIN_WEB_DEV) {origins.push(process.env.ALLOW_ORIGIN_WEB_DEV);}
   // if (process.env.ALLOW_ORIGIN_WEB_PROD) {origins.push(process.env.ALLOW_ORIGIN_WEB_PROD);}
 
-  // if (origins.indexOf(origin)) {
-  //   res.setHeader('Access-Control-Allow-Origin', origin);
-  // }
+  if (origins.indexOf(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,x-csrftoken');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
