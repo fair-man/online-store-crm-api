@@ -47,6 +47,7 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.enable('trust proxy');
 app.use(authorize);
 
 app.use(logger('dev'));
