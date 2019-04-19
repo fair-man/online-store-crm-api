@@ -22,7 +22,8 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: config.get('session:secret'),
-  store: new pgSession()
+  store: new pgSession(),
+  domain: process.env.ALLOW_ORIGIN_ADMIN_DEV || process.env.ALLOW_ORIGIN_ADMIN_PROD
 }));
 
 app.use(function (req, res, next) {
