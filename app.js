@@ -20,7 +20,7 @@ var authRouter = require('./routes/auth/login');
 var app = express();
 
 app.use(cors({
-  origin: req.get('origin'),
+  origin: 'https://online-store-admin.herokuapp.com',
   credentials: true
 }));
 
