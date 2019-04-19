@@ -16,6 +16,7 @@
   "session": {
     "secret": "",
     "cookie": {
+      "secure": true,
       "path": "/",
       "httpOnly": true,
       "maxAge": 60000
