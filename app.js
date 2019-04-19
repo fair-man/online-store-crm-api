@@ -23,7 +23,8 @@ app.use(session({
   saveUninitialized: true,
   secret: config.get('session:secret'),
   store: new pgSession(),
-  domain: process.env.ALLOW_ORIGIN_ADMIN_DEV || process.env.ALLOW_ORIGIN_ADMIN_PROD
+  domain: process.env.ALLOW_ORIGIN_ADMIN_DEV || process.env.ALLOW_ORIGIN_ADMIN_PROD,
+  proxy : true
 }));
 
 app.use(function (req, res, next) {
