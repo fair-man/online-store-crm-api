@@ -23,9 +23,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: config.get('session:secret'),
-  store: new pgSession(),
-  domain: process.env.ALLOW_ORIGIN_ADMIN_DEV || process.env.ALLOW_ORIGIN_ADMIN_PROD,
-  proxy : true
+  store: new pgSession()
 }));
 
 app.use(function (req, res, next) {
@@ -37,9 +35,9 @@ app.use(function (req, res, next) {
   // if (process.env.ALLOW_ORIGIN_WEB_DEV) {origins.push(process.env.ALLOW_ORIGIN_WEB_DEV);}
   // if (process.env.ALLOW_ORIGIN_WEB_PROD) {origins.push(process.env.ALLOW_ORIGIN_WEB_PROD);}
 
-  // if (origins.indexOf(origin)) {
-  //   res.setHeader('Access-Control-Allow-Origin', origin);
-  // }
+  if (origins.indexOf(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
@@ -48,7 +46,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(cors());
 app.use(authorize);
 
 app.use(logger('dev'));
