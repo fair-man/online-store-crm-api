@@ -16,7 +16,7 @@
   "session": {
     "secret": "",
     "cookie": {
-      "path": "/",
+      "path": "https://online-store-admin.herokuapp.com",
       "httpOnly": true,
       "maxAge": 60000
     }
