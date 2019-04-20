@@ -36,13 +36,14 @@ app.use(function (req, res, next) {
 
   console.log(origin)
 
-  if (origins.indexOf(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', true);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
+  // if (origins.indexOf(origin)) {
+  //   res.setHeader('Access-Control-Allow-Origin', origin);
+  //   res.setHeader('Access-Control-Allow-Credentials', true);
+  // } else {
+  //   res.setHeader('Access-Control-Allow-Origin', '*');
+  // }
 
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
