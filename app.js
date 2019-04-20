@@ -34,19 +34,13 @@ app.use(function (req, res, next) {
   // if (process.env.ALLOW_ORIGIN_WEB_DEV) {origins.push(process.env.ALLOW_ORIGIN_WEB_DEV);}
   // if (process.env.ALLOW_ORIGIN_WEB_PROD) {origins.push(process.env.ALLOW_ORIGIN_WEB_PROD);}
 
-  console.log(origin)
+  if (origins.indexOf(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
 
-  // if (origins.indexOf(origin)) {
-  //   res.setHeader('Access-Control-Allow-Origin', origin);
-  //   res.setHeader('Access-Control-Allow-Credentials', true);
-  // } else {
-  //   res.setHeader('Access-Control-Allow-Origin', '*');
-  // }
-
-  res.setHeader('Access-Control-Allow-Origin', 'https://online-store-admin.herokuapp.com');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
+  res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
 
