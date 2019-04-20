@@ -22,7 +22,8 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: config.get('session:secret'),
-  store: new pgSession()
+  store: new pgSession(),
+  domain: 'online-store-admin.herokuapp.com'
 }));
 
 app.use(function (req, res, next) {
