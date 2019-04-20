@@ -5,6 +5,7 @@ module.exports = function authorize(req, res, next) {
   console.log('Проверка авторизации здесь');
 
   if (req.originalUrl.indexOf('/auth/login') === -1 && req.originalUrl.indexOf('/auth/check_auth') === -1) {
+    console.log(req.session);
     if (!req.session.user) {
       var opts = {error: Enums.rcs[401], rc: 401};
 
