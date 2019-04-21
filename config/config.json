@@ -18,7 +18,8 @@
     "cookie": {
       "path": "/",
       "httpOnly": true,
-      "maxAge": 60000
+      "maxAge": 60000,
+      "domain": "online-store-admin.herokuapp.com"
     }
   }
 }
