@@ -3,6 +3,7 @@
 #other
 .env
 package-lock.json
+create-admin.js
 
 # dependencies
 /node_modules
