@@ -43,7 +43,11 @@ app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if ('OPTIONS' === req.method) {
-    res.send(200);
+    if (origins.indexOf(origin) > -1) {
+      res.send(200);
+    } else {
+      res.send(403);
+    }
   }
   else {
     next();
