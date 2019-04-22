@@ -43,13 +43,12 @@ app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   if ('OPTIONS' === req.method) {
-    if (origins.indexOf(origin) > -1) {
-      res.send(200);
-    } else {
-      res.status(403).type('application/json').send(JSON.stringify({
-        error: 'domain not allowed', response_status: 403
-      }));
-    }
+    // if (origins.indexOf(origin) > -1) {
+    //   res.send(200);
+    // } else {
+    //   res.send(403);
+    // }
+    res.send(origins.indexOf(origin) > -1 ? res.send(200) : res.send(403));
   }
   else {
     next();
