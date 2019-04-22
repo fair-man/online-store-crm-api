@@ -27,7 +27,7 @@ app.use(session({
 
 app.use(function (req, res, next) {
   var origins = [];
-  var origin = req.headers('x-origin');
+  var origin = req.headers('x-origin-domain');
 
   if (process.env.ALLOW_ORIGIN_ADMIN_DEV) {origins.push(process.env.ALLOW_ORIGIN_ADMIN_DEV);}
   if (process.env.ALLOW_ORIGIN_ADMIN_PROD) {origins.push(process.env.ALLOW_ORIGIN_ADMIN_PROD);}
@@ -39,7 +39,7 @@ app.use(function (req, res, next) {
   }
 
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,x-csrftoken,x-origin');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,x-csrftoken,x-origin-domain');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
