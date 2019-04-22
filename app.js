@@ -46,7 +46,9 @@ app.use(function (req, res, next) {
     if (origins.indexOf(origin) > -1) {
       res.send(200);
     } else {
-      res.send(403);
+      res.status(status).type('application/json').send(JSON.stringify({
+        error: 'domain not allowed', response_status: 403
+      }));
     }
   }
   else {
