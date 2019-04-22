@@ -20,7 +20,7 @@ var app = express();
 app.use(session({
   cookie: config.get('session.cookie'),
   resave: true,
-  saveUninitialized: true,
+  saveUninitialized: false,
   secret: config.get('session:secret'),
   store: new pgSession()
 }));
