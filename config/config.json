@@ -19,7 +19,6 @@
       "path": "/",
       "httpOnly": true,
       "maxAge": 60000,
-      "domain": "online-store-crm-api.herokuapp.com"
     }
   }
 }
