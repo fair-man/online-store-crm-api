@@ -27,32 +27,21 @@ app.use(session({
 
 app.use(function (req, res, next) {
   var origins = [];
-  var origin = req.get('origin');
+  var origin = process.env.NODE_ENV === 'production' ? req.get('origin') : req.get('origin') || req.get('x-origin-domain');
 
-  // if (process.env.ALLOW_ORIGIN_ADMIN_DEV) {origins.push(process.env.ALLOW_ORIGIN_ADMIN_DEV);}
+  if (process.env.ALLOW_ORIGIN_ADMIN_DEV) {origins.push(process.env.ALLOW_ORIGIN_ADMIN_DEV);}
   if (process.env.ALLOW_ORIGIN_ADMIN_PROD) {origins.push(process.env.ALLOW_ORIGIN_ADMIN_PROD);}
   // if (process.env.ALLOW_ORIGIN_WEB_DEV) {origins.push(process.env.ALLOW_ORIGIN_WEB_DEV);}
   // if (process.env.ALLOW_ORIGIN_WEB_PROD) {origins.push(process.env.ALLOW_ORIGIN_WEB_PROD);}
 
   if (origins.indexOf(origin) > -1) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,x-csrftoken,x-origin-domain');
+    res.setHeader('Access-Control-Allow-Credentials', true);
   }
 
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,x-csrftoken,x-origin-domain');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-
-  if ('OPTIONS' === req.method) {
-    // if (origins.indexOf(origin) > -1) {
-    //   res.send(200);
-    // } else {
-    //   res.send(403);
-    // }
-    res.send(origins.indexOf(origin) > -1 ? res.send(200) : res.send(403));
-  }
-  else {
-    next();
-  }
+  'OPTIONS' === req.method ? res.send(origins.indexOf(origin) > -1 ? res.send(200) : res.send(403)) : next();
 });
 
 app.use(authorize);
