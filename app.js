@@ -34,7 +34,10 @@ app.use(function (req, res, next) {
   // if (process.env.ALLOW_ORIGIN_WEB_DEV) {origins.push(process.env.ALLOW_ORIGIN_WEB_DEV);}
   // if (process.env.ALLOW_ORIGIN_WEB_PROD) {origins.push(process.env.ALLOW_ORIGIN_WEB_PROD);}
 
+  console.log('ORIGIN BEFORE =>', origin)
+
   if (origins.indexOf(origin)) {
+    console.log('ORIGIN AFTER =>', origin)
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
 
