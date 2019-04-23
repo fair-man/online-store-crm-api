@@ -58,21 +58,24 @@ router.post('/', requestValidator.body(roleCreateSchema), function (req, res, ne
     })
 });
 
-router.put('/:r_id', requestValidator.params(roleUpdateParamsSchema), requestValidator.body(roleUpdateBodySchema), function (req, res, next) {
-  var r_id = req.params.r_id;
-  var r_name = req.body.r_name;
+router.put('/:r_id',
+  requestValidator.params(roleUpdateParamsSchema),
+  requestValidator.body(roleUpdateBodySchema),
+  function (req, res, next) {
+    var r_id = req.params.r_id;
+    var r_name = req.body.r_name;
 
-  return db.any('SELECT * FROM public.role_update($(r_id), ${r_name})', {r_id: r_id, r_name: r_name})
-    .then(function (response) {
-      var opts = {data: {role: response[0]}, rc: 0};
+    return db.any('SELECT * FROM public.role_update($(r_id), ${r_name})', {r_id: r_id, r_name: r_name})
+      .then(function (response) {
+        var opts = {data: {role: response[0]}, rc: 0};
 
-      responseFormatter(200, opts, req, res)
-    })
-    .catch(function (error) {
-      var opts = {error: error, rc: 500};
+        responseFormatter(200, opts, req, res)
+      })
+      .catch(function (error) {
+        var opts = {error: error, rc: 500};
 
-      responseFormatter(500, opts, req, res);
-    })
+        responseFormatter(500, opts, req, res);
+      })
 });
 
 router.delete('/:r_id', requestValidator.params(roleRemoveParamsSchema), function (req, res, next) {

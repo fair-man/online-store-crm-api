@@ -11,9 +11,10 @@ var pgSession = require('connect-pg-simple')(session);
 
 var authorize = require('./utils/middleware/authentication');
 
+var authRouter = require('./routes/auth/login');
 var rolesRouter = require('./routes/role/role');
 var usersRouter = require('./routes/user/user');
-var authRouter = require('./routes/auth/login');
+var addressRouter = require('./routes/address/address');
 
 var app = express();
 
@@ -51,9 +52,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+router.use('/auth', authRouter);
 router.use('/roles', rolesRouter);
 router.use('/users', usersRouter);
-router.use('/auth', authRouter);
+router.use('/address', addressRouter);
 
 app.use('/api/v1', router);
 
