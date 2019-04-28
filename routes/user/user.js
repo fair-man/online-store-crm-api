@@ -25,75 +25,84 @@ router.get('/by_role/:r_id', function (req, res, next) {
     })
 });
 
-router.get('/:u_id', requestValidator.params(userParamsSchema), function (req, res, next) {
-  var u_id = req.params.u_id;
+router.get('/:u_id',
+  requestValidator.params(userParamsSchema),
+  function (req, res, next) {
+    var u_id = req.params.u_id;
 
-  return db.any('SELECT * from public.user_get(${u_id})', {u_id: u_id})
-    .then(function (response) {
-      var opts = {data: response[0].user_data, rc: 0};
+    return db.any('SELECT * from public.user_get(${u_id})', {u_id: u_id})
+      .then(function (response) {
+        var opts = {data: response[0].user_data, rc: 0};
 
-      responseFormatter(200, opts, req, res);
-    })
-    .catch(function (error) {
-      var opts = {error: error, rc: 500};
+        responseFormatter(200, opts, req, res);
+      })
+      .catch(function (error) {
+        var opts = {error: error, rc: 500};
 
-      responseFormatter(500, opts, req, res);
-    })
+        responseFormatter(500, opts, req, res);
+      });
 });
 
-router.post('/', requestValidator.body(userCreateSchema), function (req, res, next) {
-  var user_json = req.body.user_json;
-  var password = encript.makePassword();
-  var hash = encript.encryptPassword(password);
+router.post('/',
+  requestValidator.body(userCreateSchema),
+  function (req, res, next) {
+    var user_json = req.body.user_json;
+    var password = encript.makePassword();
+    var hash = encript.encryptPassword(password);
 
-  user_json.user_data.created_date = moment().format('YYYY-MM-DD HH:MM:ss');
-  user_json.user_data.salt = hash.salt;
-  user_json.user_data.hashed_password = hash.hashed_password;
+    user_json.user_data.created_date = moment().format('YYYY-MM-DD HH:MM:ss');
+    user_json.user_data.salt = hash.salt;
+    user_json.user_data.hashed_password = hash.hashed_password;
 
-  return db.any('SELECT * from public.user_create(${user_json})', {user_json: JSON.stringify(user_json)})
-    .then(function (response) {
-      var opts = {data: response[0].user_data, rc: 0};
+    return db.any('SELECT * from public.user_create(${user_json})', {user_json: JSON.stringify(user_json)})
+      .then(function (response) {
+        var opts = {data: response[0].user_data, rc: 0};
 
-      responseFormatter(200, opts, req, res);
-    })
-    .catch(function (error) {
-      var opts = {error: error, rc: 500};
+        responseFormatter(200, opts, req, res);
+      })
+      .catch(function (error) {
+        var opts = {error: error, rc: 500};
 
-      responseFormatter(500, opts, req, res);
-    })
+        responseFormatter(500, opts, req, res);
+      });
 });
 
-router.put('/:u_id', requestValidator.params(userParamsSchema), requestValidator.body(userUpdateSchema), function (req, res, next) {
-  var u_id = req.params.u_id;
-  var user_json = req.body.user_json;
+router.put('/:u_id',
+  requestValidator.params(userParamsSchema),
+  requestValidator.body(userUpdateSchema),
+  function (req, res, next) {
+    var u_id = req.params.u_id;
+    var user_json = req.body.user_json;
 
-  return db.any('SELECT * from public.user_update(${u_id}, $(user_json))', {u_id: u_id, user_json: user_json})
-    .then(function (response) {
-      var opts = {data: response[0].user_data, rc: 0};
+    return db.any('SELECT * from public.user_update(${u_id}, $(user_json))', {u_id: u_id, user_json: user_json})
+      .then(function (response) {
+        var opts = {data: response[0].user_data, rc: 0};
 
-      responseFormatter(200, opts, req, res);
-    })
-    .catch(function (error) {
-      var opts = {error: error, rc: 500};
+        responseFormatter(200, opts, req, res);
+      })
+      .catch(function (error) {
+        var opts = {error: error, rc: 500};
 
-      responseFormatter(500, opts, req, res);
-    })
+        responseFormatter(500, opts, req, res);
+      });
 });
 
-router.delete('/:u_id', requestValidator.params(userParamsSchema), function (req, res, next) {
-  var u_id = req.params.u_id;
+router.delete('/:u_id',
+  requestValidator.params(userParamsSchema),
+  function (req, res, next) {
+    var u_id = req.params.u_id;
 
-  return db.any('SELECT * from public.user_remove(${u_id})', {u_id: u_id})
-    .then(function (response) {
-      var opts = {data: {}, rc: 0};
+    return db.any('SELECT * from public.user_remove(${u_id})', {u_id: u_id})
+      .then(function (response) {
+        var opts = {data: {}, rc: 0};
 
-      responseFormatter(200, opts, req, res)
-    })
-    .catch(function (error) {
-      var opts = {error: error, rc: 500};
+        responseFormatter(200, opts, req, res)
+      })
+      .catch(function (error) {
+        var opts = {error: error, rc: 500};
 
-      responseFormatter(500, opts, req, res);
-    })
+        responseFormatter(500, opts, req, res);
+      });
 });
 
 module.exports = router;
