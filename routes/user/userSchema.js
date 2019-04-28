@@ -9,15 +9,11 @@ var userCreateSchema = {
     user_data: {
       first_name: Joi.string().required().trim().min(2).max(60),
       last_name: Joi.string().required().trim().min(2).max(60),
-      patronymic_name: Joi.string().required().trim().min(2).max(60),
+      patronymic_name: Joi.string(),
       birth_date: Joi.string().required(),
       email: Joi.string().required().email(),
-      login: Joi.string().required().min(3).max(60),
-      salt: Joi.string(),
-      hashed_password: Joi.string(),
       actual_registration_address: Joi.number(),
-      role: Joi.number(),
-      password: Joi.string().required()
+      role: Joi.number()
     },
     user_data_address_registration: {
       region: Joi.string().required().min(3).max(60),
@@ -55,10 +51,9 @@ var userUpdateSchema = {
       id: Joi.number().required(),
       first_name: Joi.string().required().trim().min(2).max(60),
       last_name: Joi.string().required().trim().min(2).max(60),
-      patronymic_name: Joi.string().required().trim().min(2).max(60),
+      patronymic_name: Joi.string(),
       birth_date: Joi.string().required(),
       email: Joi.string().required().email(),
-      login: Joi.string().required().min(3).max(60),
       actual_registration_address: Joi.number(),
       role: Joi.number()
     },
