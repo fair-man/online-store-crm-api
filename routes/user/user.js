@@ -43,9 +43,8 @@ router.get('/:u_id', requestValidator.params(userParamsSchema), function (req, r
 
 router.post('/', requestValidator.body(userCreateSchema), function (req, res, next) {
   var user_json = req.body.user_json;
-  var hash = encript.encryptPassword(user_json.user_data.password);
-
-  delete user_json.user_data.password;
+  var password = encript.makePassword();
+  var hash = encript.encryptPassword(password);
 
   user_json.user_data.created_date = moment().format('YYYY-MM-DD HH:MM:ss');
   user_json.user_data.salt = hash.salt;
