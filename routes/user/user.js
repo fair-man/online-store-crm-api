@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var nodemailer = require('nodemailer');
 
 var db = require('../../libs/db-connect');
 var encript = require('../../utils/encript');
@@ -56,9 +57,35 @@ router.post('/',
 
     return db.any('SELECT * from public.user_create(${user_json})', {user_json: JSON.stringify(user_json)})
       .then(function (response) {
-        var opts = {data: response[0].user_data, rc: 0};
+        var transporter = nodemailer.createTransport(config.get('mailer'));
+        var mailOptions = {
+          from: config.get('mailer:auth:user'),
+          to: req.body.email,
+          subject: 'Регистрация на сайте online-store-admin.herokuapp.com',
+          text: 'Успешная регистрация!',
+          html: '<h4>Здравствуйте!</h4>' +
+          '<div>Для вас была создана учетная запись на сайте ' +
+          '<a href="https://online-store-admin.herokuapp.com" target="_blank">online-store-admin.herokuapp.com</a>' +
+          ', ваши данные для авторизации:</br></div>' +
+          '<div><b>Login:</b> ' + user_json.user_data.email +
+          '<br/><b>Password:</b> ' + password + '</div><br/>' +
+          '<div>С уважением, администраниция сайта <b>online-store-admin.herokuapp.com</b></div>'
+        };
 
-        responseFormatter(200, opts, req, res);
+        transporter.sendMail(mailOptions, function(error, info) {
+          if (error) {
+            var optsError = {error: Enums.rcs[400], rc: 400, metaError: error};
+            responseFormatter(400, optsError, req, res);
+
+            console.log(error);
+            return console.log(error);
+          } else {
+            var optsSuccess = {data: response[0].user_data, rc: 0};
+
+            console.log('Message sent: %s', info.messageId);
+            responseFormatter(200, optsSuccess, req, res);
+          }
+        });
       })
       .catch(function (error) {
         var opts = {error: error, rc: 500};
