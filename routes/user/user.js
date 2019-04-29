@@ -50,7 +50,7 @@ router.post('/',
     var password = encript.makePassword();
     var hash = encript.encryptPassword(password);
 
-    user_json.user_data.created_date = moment().format('YYYY-MM-DD HH:MM:ss');
+    user_json.user_data.created_date = moment().format('YYYY-MM-DD HH:mm:ss');
     user_json.user_data.salt = hash.salt;
     user_json.user_data.hashed_password = hash.hashed_password;
 

@@ -11,7 +11,7 @@ router.post('/login', requestValidator.body(loginBodySchema), function (req, res
   var login = req.body.login;
   var password = req.body.password;
 
-  db.any('SELECT * from public.users WHERE users.login = $1' , login).then(
+  db.any('SELECT * from public.users WHERE users.email = $1' , login).then(
     function (response) {
       var userData = response && response.length && response[0];
 
