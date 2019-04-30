@@ -7,6 +7,7 @@ nconf.argv()
 
 nconf.set('postgresql:uri', process.env.DATABASE_URL);
 nconf.set('mailer:e-mail', process.env.EMAIL);
+nconf.set('mailer:secure', process.env.SECURE);
 nconf.set('mailer:auth:user', process.env.EMAIL_USER);
 nconf.set('mailer:auth:pass', process.env.EMAIL_PASS);
 nconf.set('mailer:host', process.env.EMAIL_HOST);

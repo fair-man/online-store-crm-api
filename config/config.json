@@ -7,7 +7,7 @@
     "e-mail": null,
     "host": null,
     "port": null,
-    "secure": false,
+    "secure": null,
     "auth": {
       "user": "",
       "pass": ""
@@ -18,7 +18,7 @@
     "cookie": {
       "path": "/",
       "httpOnly": true,
-      "maxAge": 2600000000
+      "maxAge": null
     }
   }
 }

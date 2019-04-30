@@ -4,6 +4,7 @@
 .env
 package-lock.json
 create-admin.js
+email-send.js
 
 # dependencies
 /node_modules

@@ -10,6 +10,8 @@ var userParamsSchema = require('./userSchema').userParamsSchema;
 var userCreateSchema = require('./userSchema').userCreateSchema;
 var userUpdateSchema = require('./userSchema').userUpdateSchema;
 var moment = require('moment');
+var config = require('../../config');
+var Enums = require('../../config/enums');
 
 router.get('/by_role/:r_id', function (req, res, next) {
   var r_id = req.params.r_id;
@@ -60,7 +62,7 @@ router.post('/',
         var transporter = nodemailer.createTransport(config.get('mailer'));
         var mailOptions = {
           from: config.get('mailer:auth:user'),
-          to: req.body.email,
+          to: user_json.user_data.email,
           subject: 'Регистрация на сайте online-store-admin.herokuapp.com',
           text: 'Успешная регистрация!',
           html: '<h4>Здравствуйте!</h4>' +
@@ -75,10 +77,11 @@ router.post('/',
         transporter.sendMail(mailOptions, function(error, info) {
           if (error) {
             var optsError = {error: Enums.rcs[400], rc: 400, metaError: error};
+
+            console.log('TransporterError => ', error);
+
             responseFormatter(400, optsError, req, res);
 
-            console.log(error);
-            return console.log(error);
           } else {
             var optsSuccess = {data: response[0].user_data, rc: 0};
 

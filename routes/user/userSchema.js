@@ -40,7 +40,7 @@ var userCreateSchema = {
       registration: Joi.number().required()
     },
     user_data_phones: Joi.array().items([{
-      phone: Joi.string().required().max(9),
+      phone: Joi.string().required().min(9),
       type: Joi.number().required()
     }])
   }
