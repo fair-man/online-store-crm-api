@@ -82,4 +82,14 @@ router.get('/check_auth', function (req, res, next) {
   )
 });
 
+router.post('/logout', function(req, res, next) {
+  req.session.destroy(function(err) {
+    if (err) { console.log(err); }
+
+    var opts = {data: 'Ok', rc: 0};
+    res.cookie("connect.sid", "", { expires: new Date() });
+    responseFormatter(200, opts, req, res);
+  })
+});
+
 module.exports = router;

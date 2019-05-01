@@ -11,7 +11,7 @@ var pgSession = require('connect-pg-simple')(session);
 
 var authorize = require('./utils/middleware/authentication');
 
-var authRouter = require('./routes/auth/login');
+var authRouter = require('./routes/auth/auth');
 var rolesRouter = require('./routes/role/role');
 var usersRouter = require('./routes/user/user');
 var addressRouter = require('./routes/address/address');
