@@ -49,7 +49,6 @@ var userCreateSchema = {
 var userUpdateSchema = {
   user_json: {
     user_data: {
-      id: Joi.number().required(),
       first_name: Joi.string().required().trim().min(2).max(60),
       last_name: Joi.string().required().trim().min(2).max(60),
       patronymic_name: Joi.string(),
@@ -85,7 +84,7 @@ var userUpdateSchema = {
       registration: Joi.number().required()
     },
     user_data_phones: Joi.array().items([{
-      phone: Joi.string().required().max(9),
+      phone: Joi.string().required().min(9),
       type: Joi.number().required()
     }])
   }
