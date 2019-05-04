@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
+var fs = require('fs');
 
 var cloudinary = require('../../libs/cloudinary-file-upload');
 var db = require('../../libs/db-connect');
@@ -112,8 +113,8 @@ router.post('/avatar_upload/:u_id', function (req, res, next) {
         resource_type: "auto",
         folder: "online-store/users/",
         public_id: 'user_' + u_id,
-        width: 95,
-        height: 130
+        width: 354,
+        height: 472
       },
       function (error, result) {
         if (error) {
@@ -123,9 +124,12 @@ router.post('/avatar_upload/:u_id', function (req, res, next) {
         } else {
           db.any('UPDATE public.users SET photo_src = ${src} WHERE users.id = ${u_id}', {src: result.secure_url, u_id: u_id}).then(
             function (response) {
-              var opts = {data: 'Photo uploader successfully', rc: 0};
-
-              responseFormatter(200, opts, req, res);
+              try {
+                fs.unlinkSync('./' + name);
+                responseFormatter(200, {data: 'Photo uploaded and drop successfully', rc: 0}, req, res);
+              } catch (err) {
+                responseFormatter(200, {data: 'Photo uploaded successfully', rc: 0}, req, res);
+              }
             }
           ).catch(
             function (error) {
