@@ -98,7 +98,7 @@ router.post('/',
       });
 });
 
-router.post('/user_file_upload/:u_id', function (req, res, next) {
+router.post('/avatar_upload/:u_id', function (req, res, next) {
   var u_id = req.params.u_id;
   var name = 'user_' + u_id + '.' + req.files.file_upload.name.split('.')[1];
 
@@ -123,7 +123,7 @@ router.post('/user_file_upload/:u_id', function (req, res, next) {
         } else {
           db.any('UPDATE public.users SET photo_src = ${src} WHERE users.id = ${u_id}', {src: result.secure_url, u_id: u_id}).then(
             function (response) {
-              var opts = {data: 'Photo uploader sucesfully', rc: 0};
+              var opts = {data: 'Photo uploader successfully', rc: 0};
 
               responseFormatter(200, opts, req, res);
             }
@@ -138,13 +138,6 @@ router.post('/user_file_upload/:u_id', function (req, res, next) {
       });
     }
   });
-
-  // var opts = {data: 'OK', rc: 0};
-  //
-  // responseFormatter(200, opts, req, res);
-
-  //console.log(u_id);
-  //console.log(file_upload);
 });
 
 router.put('/:u_id',
