@@ -101,20 +101,41 @@ router.post('/',
 router.post('/user_file_upload/:u_id', function (req, res, next) {
   var u_id = req.params.u_id;
   var name = 'user_' + u_id + '.' + req.files.file_upload.name.split('.')[1];
-  console.log(name)
-  req.files.file_upload.mv(name, function(error) {
+
+  req.files.file_upload.mv('./' + name, function(error) {
     if (error) {
-      console.log('MOVE ERROR => ', error)
+      var opts = {error: error, rc: 500};
+
+      responseFormatter(500, opts, req, res);
     } else {
-      cloudinary.uploader.upload(name,
-        function (error, result) {
-          if (error) {
-            console.log('ERROR => ', error);
-          } else {
-            console.log('RESULT => ', result);
-          }
+      cloudinary.uploader.upload('./' + name, {
+        resource_type: "auto",
+        folder: "online-store/users/",
+        public_id: 'user_' + u_id,
+        width: 95,
+        height: 130
+      },
+      function (error, result) {
+        if (error) {
+          var opts = {error: error, rc: 500};
+
+          responseFormatter(500, opts, req, res);
+        } else {
+          db.any('UPDATE public.users SET photo_src = ${src} WHERE users.id = ${u_id}', {src: result.secure_url, u_id: u_id}).then(
+            function (response) {
+              var opts = {data: 'Photo uploader sucesfully', rc: 0};
+
+              responseFormatter(200, opts, req, res);
+            }
+          ).catch(
+            function (error) {
+              var opts = {error: error, rc: 500};
+
+              responseFormatter(500, opts, req, res);
+            }
+          )
         }
-      );
+      });
     }
   });
 

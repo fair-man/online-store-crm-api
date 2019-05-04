@@ -19,7 +19,7 @@ var addressRouter = require('./routes/address/address');
 
 var app = express();
 
-app.use(fileUpload({limits: { fileSize: 5 * 1024 }}));
+app.use(fileUpload());
 app.use(session({
   cookie: config.get('session.cookie'),
   resave: true,
