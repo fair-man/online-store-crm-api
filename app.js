@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var router = express.Router();
+var fileUpload = require('express-fileupload');
 
 var config = require('./config');
 var session = require('express-session');
@@ -18,6 +19,7 @@ var addressRouter = require('./routes/address/address');
 
 var app = express();
 
+app.use(fileUpload({limits: { fileSize: 5 * 1024 }}));
 app.use(session({
   cookie: config.get('session.cookie'),
   resave: true,

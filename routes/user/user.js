@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
 
+var cloudinary = require('../../libs/cloudinary-file-upload');
 var db = require('../../libs/db-connect');
 var encript = require('../../utils/encript');
 var requestValidator = require('../../utils/requestValidator');
@@ -95,6 +96,28 @@ router.post('/',
 
         responseFormatter(500, opts, req, res);
       });
+});
+
+router.post('/user_file_upload/:u_id', function (req, res, next) {
+  var u_id = req.params.u_id;
+  var file_upload = req.files.file_upload;
+  console.log('NAME => ', 'user_' + u_id + '.' + req.files.file_upload.name.split('.')[1]);
+  cloudinary.uploader.upload(file_upload.name,
+    function (error, result) {
+      if (error) {
+        console.log('ERROR => ', error);
+      } else {
+        console.log('RESULT => ', result);
+      }
+    }
+  );
+
+  var opts = {data: 'OK', rc: 0};
+
+  responseFormatter(200, opts, req, res);
+
+  //console.log(u_id);
+  //console.log(file_upload);
 });
 
 router.put('/:u_id',

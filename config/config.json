@@ -20,5 +20,10 @@
       "httpOnly": true,
       "maxAge": null
     }
+  },
+  "cloudinary": {
+    "cloudinary_name": null,
+    "cloudinary_api_key": null,
+    "cloudinary_api_secret": null
   }
 }
