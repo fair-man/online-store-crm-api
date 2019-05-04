@@ -100,21 +100,27 @@ router.post('/',
 
 router.post('/user_file_upload/:u_id', function (req, res, next) {
   var u_id = req.params.u_id;
-  var file_upload = req.files.file_upload;
-  console.log('NAME => ', 'user_' + u_id + '.' + req.files.file_upload.name.split('.')[1]);
-  cloudinary.uploader.upload(file_upload.name,
-    function (error, result) {
-      if (error) {
-        console.log('ERROR => ', error);
-      } else {
-        console.log('RESULT => ', result);
-      }
+  var name = 'user_' + u_id + '.' + req.files.file_upload.name.split('.')[1];
+  console.log(name)
+  req.files.file_upload.mv(name, function(error) {
+    if (error) {
+      console.log('MOVE ERROR => ', error)
+    } else {
+      cloudinary.uploader.upload(name,
+        function (error, result) {
+          if (error) {
+            console.log('ERROR => ', error);
+          } else {
+            console.log('RESULT => ', result);
+          }
+        }
+      );
     }
-  );
+  });
 
-  var opts = {data: 'OK', rc: 0};
-
-  responseFormatter(200, opts, req, res);
+  // var opts = {data: 'OK', rc: 0};
+  //
+  // responseFormatter(200, opts, req, res);
 
   //console.log(u_id);
   //console.log(file_upload);
