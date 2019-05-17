@@ -16,6 +16,7 @@ var authRouter = require('./routes/auth/auth');
 var rolesRouter = require('./routes/role/role');
 var usersRouter = require('./routes/user/user');
 var addressRouter = require('./routes/address/address');
+var provider = require('./routes/provider/provider');
 
 var app = express();
 
@@ -58,6 +59,7 @@ router.use('/auth', authRouter);
 router.use('/roles', rolesRouter);
 router.use('/users', usersRouter);
 router.use('/address', addressRouter);
+router.use('/providers', provider);
 
 app.use('/api/v1', router);
 
