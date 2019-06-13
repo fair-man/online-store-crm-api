@@ -11,7 +11,7 @@ var providerCreateSchema = {
             email: Joi.string().required().email()
         },
         provider_data_contract: {
-            c_number: Joi.number().required().min(2).max(60),
+            c_number: Joi.number().required().min(2),
             start_date: Joi.string().required(),
             end_date: Joi.string().required()
         },
