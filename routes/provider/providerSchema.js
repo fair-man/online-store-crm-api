@@ -7,15 +7,14 @@ var providerParamsSchema = {
 var providerCreateSchema = {
     provider_json: {
         provider_data: {
+            id: Joi.allow(null),
             name: Joi.string().required().trim().min(2).max(60),
-            email: Joi.string().required().email()
-        },
-        provider_data_contract: {
-            c_number: Joi.number().required().min(2),
-            start_date: Joi.string().required(),
-            end_date: Joi.string().required()
+            email: Joi.string().required().email(),
+            status: Joi.number().required(),
+            actual_registration_address: Joi.number().required()
         },
         provider_data_address_registration: {
+            id: Joi.allow(null),
             region: Joi.string().required().min(3).max(60),
             district: Joi.string().required().min(3).max(60),
             city: Joi.string().required().min(3).max(60),
@@ -28,6 +27,7 @@ var providerCreateSchema = {
             registration: Joi.number().required()
         },
         provider_data_address_actual: {
+            id: Joi.allow(null),
             region: Joi.string().required().min(3).max(60),
             district: Joi.string().required().min(3).max(60),
             city: Joi.string().required().min(3).max(60),
@@ -51,13 +51,9 @@ var providerUpdateSchema = {
         provider_data: {
             id: Joi.number().required(),
             name: Joi.string().required().trim().min(2).max(60),
-            email: Joi.string().required().email()
-        },
-        provider_data_contract: {
-            id: Joi.number().required(),
-            c_number: Joi.number().required().min(2).max(60),
-            start_date: Joi.string().required(),
-            end_date: Joi.string().required()
+            email: Joi.string().required().email(),
+            status: Joi.number().required(),
+            actual_registration_address: Joi.number().required()
         },
         provider_data_address_registration: {
             id: Joi.number().required(),

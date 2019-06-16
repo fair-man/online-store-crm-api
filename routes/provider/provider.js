@@ -15,7 +15,7 @@ router.post('/',
         provider_json.provider_data.created_date = moment().format('YYYY-MM-DD HH:mm:ss');
         db.any('SELECT * from public.provider_create(${provider_json})', {provider_json: JSON.stringify(provider_json)})
             .then(function (response) {
-                var opts = {data: {provider: response[0]}, rc: 0};
+                var opts = {data: response[0], rc: 0};
 
                 responseFormatter(200, opts, req, res);
             }).catch(function (error) {
@@ -25,7 +25,7 @@ router.post('/',
         });
     });
 
-router.put('/',
+router.put('/:p_id',
     requestValidator.params(providerSchemas.providerParamsSchema),
     requestValidator.body(providerSchemas.providerUpdateSchema),
     function (req, res, next) {
@@ -35,7 +35,7 @@ router.put('/',
         db.any('SELECT * from public.provider_update(${p_id}, ${provider_json})',
             {p_id: p_id, provider_json: JSON.stringify(provider_json)})
             .then(function (response) {
-                var opts = {data: {provider: response[0]}, rc: 0};
+                var opts = {data: response[0], rc: 0};
 
                 responseFormatter(200, opts, req, res);
             }).catch(function (error) {
