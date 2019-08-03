@@ -46,10 +46,7 @@ router.put('/:p_id',
     });
 
 router.get('/', function (req, res, next) {
-    var filter = pgPromiseHelper.filterSet(req.query);
-    var select = 'SELECT * from public.providers';
-
-    db.any(select)
+    db.any('SELECT * FROM providers WHERE LOWER(name) LIKE LOWER(\'%$1#%\')', req.query.name)
         .then(function (response) {
             var opts = {data: {providers: response}, rc: 0};
 
