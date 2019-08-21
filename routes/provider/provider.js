@@ -9,7 +9,7 @@ var providerSchemas = require('./providerSchema');
 var pgPromiseHelper = require('../../utils/pgPromiseHelper');
 
 router.post('/',
-    requestValidator.body(providerSchemas.providerCreateSchema),
+        requestValidator.body(providerSchemas.providerCreateSchema),
         function (req, res, next) {
         var provider_json = req.body.provider_json;
         provider_json.provider_data.created_date = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -46,7 +46,7 @@ router.put('/:p_id',
     });
 
 router.get('/', function (req, res, next) {
-    db.any('SELECT * FROM providers WHERE LOWER(name) LIKE LOWER(\'%$1#%\')', req.query.name)
+    db.any('SELECT * FROM providers WHERE name ILIKE \'%$1#%\' LIMIT 25', req.query.name)
         .then(function (response) {
             var opts = {data: {providers: response}, rc: 0};
 

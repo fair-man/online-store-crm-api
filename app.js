@@ -17,6 +17,7 @@ var rolesRouter = require('./routes/role/role');
 var usersRouter = require('./routes/user/user');
 var addressRouter = require('./routes/address/address');
 var provider = require('./routes/provider/provider');
+var products = require('./routes/products/products');
 
 var app = express();
 
@@ -60,6 +61,7 @@ router.use('/roles', rolesRouter);
 router.use('/users', usersRouter);
 router.use('/address', addressRouter);
 router.use('/providers', provider);
+router.use('/products', products);
 
 app.use('/api/v1', router);
 
