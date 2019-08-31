@@ -54,14 +54,38 @@ router.post('/',
 
 		db.any('SELECT * from public.product_create(${product_json})', {product_json: JSON.stringify(product_json)})
 			.then(function (response) {
-				var opts = {data: 'Ok', rc: 0};
-
-				responseFormatter(200, opts, req, res);
+				responseFormatter(200, {data: 'Ok', rc: 0}, req, res);
 			}).catch(function (error) {
-			var opts = {error: error, rc: 500};
-
-			responseFormatter(500, opts, req, res);
+				responseFormatter(500, {error: error, rc: 500}, req, res);
 		});
 	});
+
+
+router.get('/groups_categories', function (req, res, next) {
+	db.any('SELECT * from public.groups_categories_products')
+		.then(function (response) {
+			responseFormatter(200, {data: {groups_categories: response}, rc: 0}, req, res);
+		}).catch(function (error) {
+			responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
+
+router.get('/groups_subcategories', function (req, res, next) {
+    db.any('SELECT * from public.groups_subcategories_products')
+        .then(function (response) {
+            responseFormatter(200, {data: {groups_subcategories: response}, rc: 0}, req, res);
+        }).catch(function (error) {
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
+
+router.get('/categories', function (req, res, next) {
+    db.any('SELECT * from public.groups_subcategories_products')
+        .then(function (response) {
+            responseFormatter(200, {data: {categories: response}, rc: 0}, req, res);
+        }).catch(function (error) {
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
 
 module.exports = router;
