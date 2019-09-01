@@ -1,5 +1,9 @@
 var Joi = require('joi');
 
+var productGroupsParams = {
+	g_id: Joi.number()
+};
+
 var productCreateSchema = {
 	product_json: {
 		category_product_id: Joi.number().required(),
@@ -21,5 +25,6 @@ var productCreateSchema = {
 };
 
 module.exports = {
-	productCreateSchema: productCreateSchema
+	productCreateSchema: productCreateSchema,
+    productGroupsParams: productGroupsParams
 };

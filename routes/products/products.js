@@ -70,8 +70,16 @@ router.get('/groups_categories', function (req, res, next) {
     });
 });
 
-router.get('/groups_subcategories', function (req, res, next) {
-    db.any('SELECT * from public.groups_subcategories_products')
+router.get('/groups_subcategories',
+	requestValidator.query(productSchemas.productGroupsParams),
+	function (req, res, next) {
+	var select = 'SELECT * from public.groups_subcategories_products';
+
+	if (req.query.g_id) {
+		select += ' WHERE groups_subcategories_products.id = ' + req.query.g_id;
+	}
+
+    db.any(select)
         .then(function (response) {
             responseFormatter(200, {data: {groups_subcategories: response}, rc: 0}, req, res);
         }).catch(function (error) {
