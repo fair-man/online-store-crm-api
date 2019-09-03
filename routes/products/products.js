@@ -47,7 +47,7 @@ router.get('/groups_subcategories',
 	var select = 'SELECT * from public.groups_subcategories_products';
 
 	if (req.query.g_id) {
-		select += ' WHERE groups_subcategories_products.id = ' + req.query.g_id;
+		select += ' WHERE groups_subcategories_products.group_category_id = ' + req.query.g_id;
 	}
 
     db.any(select)
@@ -60,10 +60,25 @@ router.get('/groups_subcategories',
 
 router.post('/groups_subcategories/create', function (req, res, next) {
 	db.any('SELECT * from public.group_subcategory_create(${id}, ${name}, ${description})', {
-		id: req.body.id, name: req.body.name, description: req.body.description
+		id: req.body.g_group_category_id, name: req.body.g_name, description: req.body.g_description
 	}).then(function (response) {
         responseFormatter(200, {data: response[0], rc: 0}, req, res);
 	}).catch(function (error) {
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
+
+router.put('/groups_subcategories/update', function (req, res, next) {
+    console.log(req.body)
+    db.any('SELECT * from public.group_subcategory_update(${g_id}, ${g_group_category_id}, ${g_name}, ${g_description})', {
+        g_id: req.body.g_id,
+        g_group_category_id: req.body.g_group_category_id,
+        g_name: req.body.g_name,
+        g_description: req.body.g_description
+    }).then(function (response) {
+        console.log(response)
+        responseFormatter(200, {data: response[0], rc: 0}, req, res);
+    }).catch(function (error) {
         responseFormatter(500, {error: error, rc: 500}, req, res);
     });
 });
