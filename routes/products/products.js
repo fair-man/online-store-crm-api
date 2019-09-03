@@ -69,14 +69,12 @@ router.post('/groups_subcategories/create', function (req, res, next) {
 });
 
 router.put('/groups_subcategories/update', function (req, res, next) {
-    console.log(req.body)
     db.any('SELECT * from public.group_subcategory_update(${g_id}, ${g_group_category_id}, ${g_name}, ${g_description})', {
         g_id: req.body.g_id,
         g_group_category_id: req.body.g_group_category_id,
         g_name: req.body.g_name,
         g_description: req.body.g_description
     }).then(function (response) {
-        console.log(response)
         responseFormatter(200, {data: response[0], rc: 0}, req, res);
     }).catch(function (error) {
         responseFormatter(500, {error: error, rc: 500}, req, res);
