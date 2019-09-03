@@ -4,6 +4,12 @@ var productGroupsParams = {
 	g_id: Joi.number()
 };
 
+var productGroupCreateBody = {
+	id: Joi.allow(null),
+	name: Joi.string().required(),
+	description: Joi.string().required()
+};
+
 var productCreateSchema = {
 	product_json: {
 		category_product_id: Joi.number().required(),
@@ -26,5 +32,6 @@ var productCreateSchema = {
 
 module.exports = {
 	productCreateSchema: productCreateSchema,
-    productGroupsParams: productGroupsParams
+    productGroupsParams: productGroupsParams,
+    productGroupCreateBody: productGroupCreateBody
 };
