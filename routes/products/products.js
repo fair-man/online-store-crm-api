@@ -82,7 +82,13 @@ router.put('/groups_subcategories/update', function (req, res, next) {
 });
 
 router.get('/categories', function (req, res, next) {
-    db.any('SELECT * from public.groups_subcategories_products')
+    var select = 'SELECT * from public.categories_products';
+
+    if (req.query.g_id) {
+        select += ' WHERE categories_products.group_subcategory_id = ' + req.query.g_id;
+    }
+
+    db.any(select)
         .then(function (response) {
             responseFormatter(200, {data: {categories: response}, rc: 0}, req, res);
         }).catch(function (error) {
