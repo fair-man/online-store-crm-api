@@ -11,8 +11,8 @@ router.get('/groups_categories', function (req, res, next) {
         .then(function (response) {
             responseFormatter(200, {data: {groups_categories: response}, rc: 0}, req, res);
         }).catch(function (error) {
-			responseFormatter(500, {error: error, rc: 500}, req, res);
-		});
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
 });
 
 router.post('/groups_categories/create',
@@ -23,8 +23,8 @@ router.post('/groups_categories/create',
             .then(function (response) {
                 responseFormatter(200, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-				responseFormatter(500, {error: error, rc: 500}, req, res);
-			});
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
     }
 );
 
@@ -36,34 +36,34 @@ router.put('/groups_categories/update',
             .then(function (response) {
                 responseFormatter(200, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-				responseFormatter(500, {error: error, rc: 500}, req, res);
-			});
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
     }
 );
 
 router.get('/groups_subcategories',
-	requestValidator.query(productSchemas.productGroupsParams),
-	function (req, res, next) {
-	var select = 'SELECT * from public.groups_subcategories_products';
+    requestValidator.query(productSchemas.productGroupsParams),
+    function (req, res, next) {
+        var select = 'SELECT * from public.groups_subcategories_products';
 
-	if (req.query.g_id) {
-		select += ' WHERE groups_subcategories_products.group_category_id = ' + req.query.g_id;
-	}
+        if (req.query.g_id) {
+            select += ' WHERE groups_subcategories_products.group_category_id = ' + req.query.g_id;
+        }
 
-    db.any(select)
-        .then(function (response) {
-            responseFormatter(200, {data: {groups_subcategories: response}, rc: 0}, req, res);
-        }).catch(function (error) {
-			responseFormatter(500, {error: error, rc: 500}, req, res);
-		});
-});
+        db.any(select)
+            .then(function (response) {
+                responseFormatter(200, {data: {groups_subcategories: response}, rc: 0}, req, res);
+            }).catch(function (error) {
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
+    });
 
 router.post('/groups_subcategories/create', function (req, res, next) {
-	db.any('SELECT * from public.group_subcategory_create(${id}, ${name}, ${description})', {
-		id: req.body.g_group_category_id, name: req.body.g_name, description: req.body.g_description
-	}).then(function (response) {
+    db.any('SELECT * from public.group_subcategory_create(${id}, ${name}, ${description})', {
+        id: req.body.g_group_category_id, name: req.body.g_name, description: req.body.g_description
+    }).then(function (response) {
         responseFormatter(200, {data: response[0], rc: 0}, req, res);
-	}).catch(function (error) {
+    }).catch(function (error) {
         responseFormatter(500, {error: error, rc: 500}, req, res);
     });
 });
@@ -92,8 +92,17 @@ router.get('/categories', function (req, res, next) {
         .then(function (response) {
             responseFormatter(200, {data: {categories: response}, rc: 0}, req, res);
         }).catch(function (error) {
-			responseFormatter(500, {error: error, rc: 500}, req, res);
-		});
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
+
+router.post('/characteristics/create', function (req, res, next) {
+    db.any('SELECT * from public.characteristic_group_create(${ch_name}, ${ch_description}, ${ch_is_main})', req.body)
+        .then(function (response) {
+            responseFormatter(200, {data: response[0], rc: 0}, req, res);
+        }).catch(function (error) {
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
 });
 
 router.post('/',
@@ -146,8 +155,8 @@ router.post('/',
             .then(function (response) {
                 responseFormatter(200, {data: 'Ok', rc: 0}, req, res);
             }).catch(function (error) {
-				responseFormatter(500, {error: error, rc: 500}, req, res);
-			});
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
     });
 
 module.exports = router;
