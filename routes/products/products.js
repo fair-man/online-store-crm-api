@@ -101,8 +101,8 @@ router.post('/characteristics/create', function (req, res, next) {
         .then(function (response) {
             responseFormatter(200, {data: response[0], rc: 0}, req, res);
         }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
-        });
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
 });
 
 router.post('/',
