@@ -61,9 +61,9 @@ router.post('/groups_subcategories/create',
     function (req, res, next) {
         db.any('SELECT * from public.group_subcategory_create(${gs_group_category_id}, ${gs_name}, ${gs_description})',
             req.body)
-        .then(function (response) {
-            responseFormatter(200, {data: response[0], rc: 0}, req, res);
-        }).catch(function (error) {
+            .then(function (response) {
+                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+            }).catch(function (error) {
             responseFormatter(500, {error: error, rc: 500}, req, res);
         });
     });
@@ -73,9 +73,9 @@ router.put('/groups_subcategories/update',
     function (req, res, next) {
         db.any('SELECT * from public.group_subcategory_update(${gs_id}, ${gs_group_category_id}, ${gs_name},' +
             ' ${gs_description})', req.body)
-        .then(function (response) {
-            responseFormatter(200, {data: response[0], rc: 0}, req, res);
-        }).catch(function (error) {
+            .then(function (response) {
+                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+            }).catch(function (error) {
             responseFormatter(500, {error: error, rc: 500}, req, res);
         });
     });
@@ -96,6 +96,15 @@ router.get('/categories',
             responseFormatter(500, {error: error, rc: 500}, req, res);
         });
     });
+
+router.get('/categories/manage', function (req, res, next) {
+   db.any('SElECT * from public.category_get()')
+       .then(function (response) {
+           responseFormatter(200, {data: response, rc: 0}, req, res);
+       }).catch(function (error) {
+       responseFormatter(500, {error: error, rc: 500}, req, res);
+   });
+});
 
 router.post('/categories/create',
     requestValidator.body(productSchemas.categoryCreate),
@@ -121,7 +130,16 @@ router.put('/categories/update',
         });
     });
 
-router.post('/characteristics/create',
+router.get('/characteristics/groups', function (req, res, next) {
+    db.any('SELECT * from public.characteristic_groups_products')
+        .then(function (response) {
+            responseFormatter(200, {data: response, rc: 0}, req, res);
+        }).catch(function (error) {
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
+
+router.post('/characteristics/groups/create',
     requestValidator.body(productSchemas.characteristicGroupCreate),
     function (req, res, next) {
         db.any('SELECT * from public.characteristic_group_create(${ch_name}, ${ch_description}, ${ch_is_main})',
