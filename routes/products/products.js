@@ -9,7 +9,7 @@ var requestValidator = require('../../utils/requestValidator');
 router.get('/groups_categories', function (req, res, next) {
     db.any('SELECT * from public.groups_categories_products')
         .then(function (response) {
-            responseFormatter(200, {data: {groups_categories: response}, rc: 0}, req, res);
+            responseFormatter(200, {data: response, rc: 0}, req, res);
         }).catch(function (error) {
         responseFormatter(500, {error: error, rc: 500}, req, res);
     });
@@ -52,58 +52,68 @@ router.get('/groups_subcategories',
 
         db.any(select)
             .then(function (response) {
-                responseFormatter(200, {data: {groups_subcategories: response}, rc: 0}, req, res);
+                responseFormatter(200, {data: response, rc: 0}, req, res);
             }).catch(function (error) {
             responseFormatter(500, {error: error, rc: 500}, req, res);
         });
     });
 
-router.post('/groups_subcategories/create', function (req, res, next) {
-    db.any('SELECT * from public.group_subcategory_create(${id}, ${name}, ${description})', {
-        id: req.body.g_group_category_id, name: req.body.g_name, description: req.body.g_description
-    }).then(function (response) {
-        responseFormatter(200, {data: response[0], rc: 0}, req, res);
-    }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
-    });
-});
-
-router.put('/groups_subcategories/update', function (req, res, next) {
-    db.any('SELECT * from public.group_subcategory_update(${g_id}, ${g_group_category_id}, ${g_name}, ${g_description})', {
-        g_id: req.body.g_id,
-        g_group_category_id: req.body.g_group_category_id,
-        g_name: req.body.g_name,
-        g_description: req.body.g_description
-    }).then(function (response) {
-        responseFormatter(200, {data: response[0], rc: 0}, req, res);
-    }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
-    });
-});
-
-router.get('/categories', function (req, res, next) {
-    var select = 'SELECT * from public.categories_products';
-
-    if (req.query.g_id) {
-        select += ' WHERE categories_products.group_subcategory_id = ' + req.query.g_id;
-    }
-
-    db.any(select)
-        .then(function (response) {
-            responseFormatter(200, {data: {categories: response}, rc: 0}, req, res);
-        }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
-    });
-});
-
-router.post('/characteristics/create', function (req, res, next) {
-    db.any('SELECT * from public.characteristic_group_create(${ch_name}, ${ch_description}, ${ch_is_main})', req.body)
-        .then(function (response) {
+router.post('/groups_subcategories/create',
+    requestValidator.body(productSchemas.productGroupCreateBody),
+    function (req, res, next) {
+        db.any('SELECT * from public.group_subcategory_create(${id}, ${name}, ${description})', {
+            id: req.body.g_group_category_id, name: req.body.g_name, description: req.body.g_description
+        }).then(function (response) {
             responseFormatter(200, {data: response[0], rc: 0}, req, res);
         }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
     });
-});
+
+router.put('/groups_subcategories/update',
+    requestValidator.body(productSchemas.productGroupCreateBody),
+    function (req, res, next) {
+        db.any('SELECT * from public.group_subcategory_update(${g_id}, ${g_group_category_id}, ${g_name},' +
+            ' ${g_description})', {
+            g_id: req.body.g_id,
+            g_group_category_id: req.body.g_group_category_id,
+            g_name: req.body.g_name,
+            g_description: req.body.g_description
+        }).then(function (response) {
+            responseFormatter(200, {data: response[0], rc: 0}, req, res);
+        }).catch(function (error) {
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
+    });
+
+router.get('/categories',
+    requestValidator.query(productSchemas.productGroupsParams),
+    function (req, res, next) {
+        var select = 'SELECT * from public.categories_products';
+
+        if (req.query.g_id) {
+            select += ' WHERE categories_products.group_subcategory_id = ' + req.query.g_id;
+        }
+
+        db.any(select)
+            .then(function (response) {
+                responseFormatter(200, {data: response, rc: 0}, req, res);
+            }).catch(function (error) {
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
+    });
+
+router.post('/characteristics/create',
+    requestValidator.body(productSchemas.characteristicGroupCreate),
+    function (req, res, next) {
+        db.any('SELECT * from public.characteristic_group_create(${ch_name}, ${ch_description}, ${ch_is_main})',
+            req.body)
+            .then(function (response) {
+                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+            }).catch(function (error) {
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
+    });
 
 router.post('/',
     requestValidator.body(productSchemas.productCreateSchema),
