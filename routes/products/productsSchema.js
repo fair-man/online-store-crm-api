@@ -5,9 +5,43 @@ var productGroupsParams = {
 };
 
 var productGroupCreateBody = {
-	id: Joi.allow(null),
-	name: Joi.string().required(),
-	description: Joi.string().required()
+	g_id: Joi.allow(null),
+	g_name: Joi.string().required(),
+	g_description: Joi.string().required()
+};
+
+var productSubGroupCreateBody = {
+	gs_id: Joi.allow(null),
+    gs_group_category_id: Joi.allow(null),
+    gs_name: Joi.string().required(),
+    gs_description: Joi.string().required()
+};
+
+var productSubGroupUpdateBody = {
+	gs_id: Joi.number().required(),
+    gs_group_category_id: Joi.allow(null),
+    gs_name: Joi.string().required(),
+    gs_description: Joi.string().required()
+};
+
+var characteristicGroupCreate = {
+    ch_name: Joi.string().required().min(2).max(60),
+    ch_description: Joi.string().required().min(2).max(600),
+    ch_is_main: Joi.number()
+};
+
+var categoryCreate = {
+	c_id: Joi.allow(null),
+    c_group_subcategory_id: Joi.number().required(),
+    c_name: Joi.string().required().min(2).max(60),
+    c_description: Joi.string().required().min(2).max(600)
+};
+
+var categoryUpdate = {
+    c_id: Joi.number().required(),
+    c_group_subcategory_id: Joi.number().required(),
+    c_name: Joi.string().required().min(2).max(60),
+    c_description: Joi.string().required().min(2).max(600)
 };
 
 var productCreateSchema = {
@@ -30,15 +64,13 @@ var productCreateSchema = {
 	}
 };
 
-var characteristicGroupCreate = {
-    ch_name: Joi.string().required().min(2).max(60),
-    ch_description: Joi.string().required().min(2).max(600),
-	ch_is_main: Joi.number()
-};
-
 module.exports = {
-	productCreateSchema: productCreateSchema,
     productGroupsParams: productGroupsParams,
     productGroupCreateBody: productGroupCreateBody,
-    characteristicGroupCreate: characteristicGroupCreate
+    productSubGroupCreateBody: productSubGroupCreateBody,
+    productSubGroupUpdateBody: productSubGroupUpdateBody,
+	productCreateSchema: productCreateSchema,
+    characteristicGroupCreate: characteristicGroupCreate,
+    categoryCreate: categoryCreate,
+    categoryUpdate: categoryUpdate
 };
