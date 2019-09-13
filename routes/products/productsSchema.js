@@ -4,6 +4,10 @@ var productGroupsParams = {
 	g_id: Joi.number()
 };
 
+var productCategoryParams = {
+    c_id: Joi.number()
+};
+
 var productGroupCreateBody = {
 	g_id: Joi.allow(null),
 	g_name: Joi.string().required(),
@@ -25,6 +29,13 @@ var productSubGroupUpdateBody = {
 };
 
 var characteristicGroupCreate = {
+    ch_name: Joi.string().required().min(2).max(60),
+    ch_description: Joi.string().required().min(2).max(600),
+    ch_is_main: Joi.number()
+};
+
+var characteristicGroupUpdate = {
+	ch_id: Joi.number().required(),
     ch_name: Joi.string().required().min(2).max(60),
     ch_description: Joi.string().required().min(2).max(600),
     ch_is_main: Joi.number()
@@ -66,11 +77,13 @@ var productCreateSchema = {
 
 module.exports = {
     productGroupsParams: productGroupsParams,
+    productCategoryParams: productCategoryParams,
     productGroupCreateBody: productGroupCreateBody,
     productSubGroupCreateBody: productSubGroupCreateBody,
     productSubGroupUpdateBody: productSubGroupUpdateBody,
 	productCreateSchema: productCreateSchema,
     characteristicGroupCreate: characteristicGroupCreate,
     categoryCreate: categoryCreate,
-    categoryUpdate: categoryUpdate
+    categoryUpdate: categoryUpdate,
+    characteristicGroupUpdate: characteristicGroupUpdate
 };

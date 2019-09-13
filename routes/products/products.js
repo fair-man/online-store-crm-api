@@ -97,6 +97,17 @@ router.get('/categories',
         });
     });
 
+router.get('/categories/groups',
+    requestValidator.query(productSchemas.productCategoryParams),
+    function (req, res, next) {
+        db.any('SELECT * from public.category_groups_get(${c_id})', req.query)
+            .then(function (response) {
+                responseFormatter(200, {data: response, rc: 0}, req, res);
+            }).catch(function (error) {
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
+    });
+
 router.get('/categories/manage', function (req, res, next) {
    db.any('SElECT * from public.category_get()')
        .then(function (response) {
@@ -130,19 +141,31 @@ router.put('/categories/update',
         });
     });
 
-router.get('/characteristics/groups', function (req, res, next) {
-    db.any('SELECT * from public.characteristic_groups_products')
+router.put('/categories/manage/update', function (req, res, next) {
+    db.any('SElECT * from public.category_groups_characteristics_update(${c_id}, ${c_groups})', req.body)
         .then(function (response) {
-            responseFormatter(200, {data: response, rc: 0}, req, res);
+            responseFormatter(200, {data: response[0], rc: 0}, req, res);
         }).catch(function (error) {
         responseFormatter(500, {error: error, rc: 500}, req, res);
     });
 });
 
-router.post('/characteristics/groups/create',
+router.post('/groups/characteristics/create',
     requestValidator.body(productSchemas.characteristicGroupCreate),
     function (req, res, next) {
-        db.any('SELECT * from public.characteristic_group_create(${ch_name}, ${ch_description}, ${ch_is_main})',
+        db.any('SELECT * from public.group_characteristic_create(${ch_name}, ${ch_description}, ${ch_is_main})',
+            req.body)
+            .then(function (response) {
+                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+            }).catch(function (error) {
+            responseFormatter(500, {error: error, rc: 500}, req, res);
+        });
+    });
+
+router.put('/groups/characteristics/update',
+    requestValidator.body(productSchemas.characteristicGroupUpdate),
+    function (req, res, next) {
+        db.any('SELECT * from public.group_characteristic_update(${ch_id}, ${ch_name}, ${ch_description}, ${ch_is_main})',
             req.body)
             .then(function (response) {
                 responseFormatter(200, {data: response[0], rc: 0}, req, res);
