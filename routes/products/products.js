@@ -150,10 +150,20 @@ router.put('/categories/manage/update', function (req, res, next) {
     });
 });
 
+router.get('/groups/characteristics', function (req, res, next) {
+    db.any('SELECT * from public.characteristic_groups_products')
+        .then(function (response) {
+            responseFormatter(200, {data: response, rc: 0}, req, res);
+        }).catch(function (error) {
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
+
 router.post('/groups/characteristics/create',
     requestValidator.body(productSchemas.characteristicGroupCreate),
     function (req, res, next) {
-        db.any('SELECT * from public.group_characteristic_create(${ch_name}, ${ch_description}, ${ch_is_main})',
+        db.any('SELECT * from public.group_characteristic_create(' +
+            '${ch_name}, ${ch_description}, ${ch_is_main}, ${ch_sort_order})',
             req.body)
             .then(function (response) {
                 responseFormatter(200, {data: response[0], rc: 0}, req, res);
@@ -165,7 +175,8 @@ router.post('/groups/characteristics/create',
 router.put('/groups/characteristics/update',
     requestValidator.body(productSchemas.characteristicGroupUpdate),
     function (req, res, next) {
-        db.any('SELECT * from public.group_characteristic_update(${ch_id}, ${ch_name}, ${ch_description}, ${ch_is_main})',
+        db.any('SELECT * from public.group_characteristic_update(' +
+            '${ch_id}, ${ch_name}, ${ch_description}, ${ch_is_main}, ${ch_sort_order})',
             req.body)
             .then(function (response) {
                 responseFormatter(200, {data: response[0], rc: 0}, req, res);
@@ -177,50 +188,7 @@ router.put('/groups/characteristics/update',
 router.post('/',
     requestValidator.body(productSchemas.productCreateSchema),
     function (req, res, next) {
-        var product_json = {
-            category_product_id: 1,
-            name: 'Мобильный тебефон MyPhone2',
-            description: 'Мобильный телефон с самой новой ОС и передовыми технологиями',
-            vendor_code: '1111000000001',
-            price: 100,
-            count: 99,
-            products_groups_description_options: [
-                {
-                    name: 'Основные характеристики',
-                    is_main: 1,
-                    options: [
-                        {
-                            name: 'Характеристика 1',
-                            value: 'Значение характеристики 1',
-                            description: 'Доп. описание характеристики'
-                        },
-                        {
-                            name: 'Характеристика 2',
-                            value: 'Значение характеристики 2',
-                            description: 'Доп. описание характеристики'
-                        }
-                    ]
-                },
-                {
-                    name: 'Камера',
-                    is_main: 0,
-                    options: [
-                        {
-                            name: 'Передняя',
-                            value: '1,3 мегапикселя',
-                            description: null
-                        },
-                        {
-                            name: 'Задняя',
-                            value: '8 мегапикселей',
-                            description: null
-                        }
-                    ]
-                }
-            ]
-        };
-
-        db.any('SELECT * from public.product_create(${product_json})', {product_json: JSON.stringify(product_json)})
+        db.any('SELECT * from public.product_create(${product_json})', {product_json: JSON.stringify(req.body.product_json)})
             .then(function (response) {
                 responseFormatter(200, {data: 'Ok', rc: 0}, req, res);
             }).catch(function (error) {

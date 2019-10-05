@@ -31,14 +31,16 @@ var productSubGroupUpdateBody = {
 var characteristicGroupCreate = {
     ch_name: Joi.string().required().min(2).max(60),
     ch_description: Joi.string().required().min(2).max(600),
-    ch_is_main: Joi.number()
+    ch_is_main: Joi.number(),
+    ch_sort_order: Joi.number()
 };
 
 var characteristicGroupUpdate = {
 	ch_id: Joi.number().required(),
     ch_name: Joi.string().required().min(2).max(60),
     ch_description: Joi.string().required().min(2).max(600),
-    ch_is_main: Joi.number()
+    ch_is_main: Joi.number(),
+    ch_sort_order: Joi.number()
 };
 
 var categoryCreate = {
