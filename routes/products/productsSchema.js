@@ -66,12 +66,13 @@ var productCreateSchema = {
 		price: Joi.number().required(),
 		count: Joi.number().required(),
 		products_groups_description_options: Joi.array().items([{
-			name: Joi.string().required().min(2).max(60),
-			is_main: Joi.number().optional(),
+            id: Joi.number().required(),
+            sort_order: Joi.number().required(),
 			options: Joi.array().items([{
 				name: Joi.string().required().min(2).max(60),
 				value: Joi.string().required().min(2).max(600),
-				description: Joi.string().required().min(2).max(600)
+				description: Joi.string().optional().min(2).max(600),
+                sort_order: Joi.number().required()
 			}])
 		}])
 	}

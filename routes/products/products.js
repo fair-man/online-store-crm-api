@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../libs/db-connect');
 var productSchemas = require('./productsSchema');
+var moment = require('moment');
 
 var responseFormatter = require('../../utils/responseFormatter');
 var requestValidator = require('../../utils/requestValidator');
@@ -185,9 +186,10 @@ router.put('/groups/characteristics/update',
         });
     });
 
-router.post('/',
+router.post('/create',
     requestValidator.body(productSchemas.productCreateSchema),
     function (req, res, next) {
+        req.body.product_json.created_date = moment().format('YYYY-MM-DD HH:mm:ss');
         db.any('SELECT * from public.product_create(${product_json})', {product_json: JSON.stringify(req.body.product_json)})
             .then(function (response) {
                 responseFormatter(200, {data: 'Ok', rc: 0}, req, res);
