@@ -110,12 +110,12 @@ router.get('/categories/groups',
     });
 
 router.get('/categories/manage', function (req, res, next) {
-   db.any('SElECT * from public.category_get()')
-       .then(function (response) {
-           responseFormatter(200, {data: response, rc: 0}, req, res);
-       }).catch(function (error) {
-       responseFormatter(500, {error: error, rc: 500}, req, res);
-   });
+    db.any('SElECT * from public.category_get()')
+        .then(function (response) {
+            responseFormatter(200, {data: response, rc: 0}, req, res);
+        }).catch(function (error) {
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
 });
 
 router.post('/categories/create',
@@ -197,5 +197,15 @@ router.post('/create',
             responseFormatter(500, {error: error, rc: 500}, req, res);
         });
     });
+
+router.get('/search', function (req, res, next) {
+    db.any('SELECT * from public.products_search(${p_name}, ${p_code})',
+        {p_name: req.query.p_name || null, p_code: req.query.p_code || null})
+        .then(function (response) {
+            responseFormatter(200, {data: response, rc: 0}, req, res);
+        }).catch(function (error) {
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
 
 module.exports = router;
