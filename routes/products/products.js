@@ -208,4 +208,13 @@ router.get('/search', function (req, res, next) {
     });
 });
 
+router.get('/:p_id', function (req, res, next) {
+    db.any('SELECT * from public.product_get(${p_id})', {p_id: req.params.p_id})
+        .then(function (response) {
+            responseFormatter(200, {data: response, rc: 0}, req, res);
+        }).catch(function (error) {
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
+
 module.exports = router;
