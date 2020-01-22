@@ -45,6 +45,19 @@ router.put('/:p_id',
         });
     });
 
+router.get('/names', function (req, res, next) {
+    db.any('SELECT * from public.providers_names_get()')
+        .then(function (response) {
+            var opts = {data: {providers: response}, rc: 0};
+
+            responseFormatter(200, opts, req, res);
+        }).catch(function (error) {
+        var opts = {error: error, rc: 500};
+
+        responseFormatter(500, opts, req, res);
+    });
+});
+
 router.get('/', function (req, res, next) {
     db.any('SELECT * FROM providers WHERE name ILIKE \'%$1#%\' LIMIT 25', req.query.name)
         .then(function (response) {
