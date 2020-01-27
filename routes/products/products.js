@@ -217,4 +217,15 @@ router.get('/:p_id', function (req, res, next) {
     });
 });
 
+router.post('/invoice/create', function (req, res, next) {
+    var invoice_json = req.body;
+    invoice_json.created_date = moment().format('YYYY-MM-DD HH:mm:ss');
+    db.any('SELECT * from public.invoice_create(${invoice_json})', {invoice_json: JSON.stringify(invoice_json)})
+        .then(function (response) {
+            responseFormatter(200, {data: 'Ok', rc: 0}, req, res);
+        }).catch(function (error) {
+        responseFormatter(500, {error: error, rc: 500}, req, res);
+    });
+});
+
 module.exports = router;
