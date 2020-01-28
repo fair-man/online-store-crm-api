@@ -6,13 +6,14 @@ var moment = require('moment');
 
 var responseFormatter = require('../../utils/responseFormatter');
 var requestValidator = require('../../utils/requestValidator');
+var Enums = require('../../config/enums/index');
 
 router.get('/groups_categories', function (req, res, next) {
     db.any('SELECT * from public.groups_categories_products')
         .then(function (response) {
-            responseFormatter(200, {data: response, rc: 0}, req, res);
+            responseFormatter(Enums.codes.SUCCESS, {data: response, rc: 0}, req, res);
         }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
     });
 });
 
@@ -21,9 +22,9 @@ router.post('/groups_categories/create',
     function (req, res, next) {
         db.any('SELECT * from public.group_category_create(${g_name}, ${g_description})', req.body)
             .then(function (response) {
-                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     }
 );
@@ -33,9 +34,9 @@ router.put('/groups_categories/update',
     function (req, res, next) {
         db.any('SELECT * from public.group_category_update(${g_id}, ${g_name}, ${g_description})', req.body)
             .then(function (response) {
-                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     }
 );
@@ -51,9 +52,9 @@ router.get('/groups_subcategories',
 
         db.any(select)
             .then(function (response) {
-                responseFormatter(200, {data: response, rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response, rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
@@ -63,9 +64,9 @@ router.post('/groups_subcategories/create',
         db.any('SELECT * from public.group_subcategory_create(${gs_group_category_id}, ${gs_name}, ${gs_description})',
             req.body)
             .then(function (response) {
-                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
@@ -75,9 +76,9 @@ router.put('/groups_subcategories/update',
         db.any('SELECT * from public.group_subcategory_update(${gs_id}, ${gs_group_category_id}, ${gs_name},' +
             ' ${gs_description})', req.body)
             .then(function (response) {
-                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
@@ -92,9 +93,9 @@ router.get('/categories',
 
         db.any(select)
             .then(function (response) {
-                responseFormatter(200, {data: response, rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response, rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
@@ -103,18 +104,18 @@ router.get('/categories/groups',
     function (req, res, next) {
         db.any('SELECT * from public.category_groups_get(${c_id})', req.query)
             .then(function (response) {
-                responseFormatter(200, {data: response, rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response, rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
 router.get('/categories/manage', function (req, res, next) {
     db.any('SElECT * from public.category_get()')
         .then(function (response) {
-            responseFormatter(200, {data: response, rc: 0}, req, res);
+            responseFormatter(Enums.codes.SUCCESS, {data: response, rc: 0}, req, res);
         }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
     });
 });
 
@@ -124,9 +125,9 @@ router.post('/categories/create',
         db.any('SELECT * from public.category_create(${c_group_subcategory_id}, ${c_name}, ${c_description})',
             req.body)
             .then(function (response) {
-                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
@@ -136,27 +137,29 @@ router.put('/categories/update',
         db.any('SELECT * from public.category_update(${c_id}, ${c_group_subcategory_id}, ${c_name}, ${c_description})',
             req.body)
             .then(function (response) {
-                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
-router.put('/categories/manage/update', function (req, res, next) {
+router.put('/categories/manage/update',
+    requestValidator.body(productSchemas.categoryManageUpdate),
+    function (req, res, next) {
     db.any('SElECT * from public.category_groups_characteristics_update(${c_id}, ${c_groups})', req.body)
         .then(function (response) {
-            responseFormatter(200, {data: response[0], rc: 0}, req, res);
+            responseFormatter(Enums.codes.SUCCESS, {data: response[0], rc: 0}, req, res);
         }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
     });
 });
 
 router.get('/groups/characteristics', function (req, res, next) {
     db.any('SELECT * from public.characteristic_groups_products')
         .then(function (response) {
-            responseFormatter(200, {data: response, rc: 0}, req, res);
+            responseFormatter(Enums.codes.SUCCESS, {data: response, rc: 0}, req, res);
         }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
     });
 });
 
@@ -167,9 +170,9 @@ router.post('/groups/characteristics/create',
             '${ch_name}, ${ch_description}, ${ch_is_main}, ${ch_sort_order})',
             req.body)
             .then(function (response) {
-                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
@@ -180,9 +183,9 @@ router.put('/groups/characteristics/update',
             '${ch_id}, ${ch_name}, ${ch_description}, ${ch_is_main}, ${ch_sort_order})',
             req.body)
             .then(function (response) {
-                responseFormatter(200, {data: response[0], rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: response[0], rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
@@ -192,9 +195,9 @@ router.post('/create',
         req.body.product_json.created_date = moment().format('YYYY-MM-DD HH:mm:ss');
         db.any('SELECT * from public.product_create(${product_json})', {product_json: JSON.stringify(req.body.product_json)})
             .then(function (response) {
-                responseFormatter(200, {data: 'Ok', rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: 'Ok', rc: 0}, req, res);
             }).catch(function (error) {
-            responseFormatter(500, {error: error, rc: 500}, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
 
@@ -202,29 +205,32 @@ router.get('/search', function (req, res, next) {
     db.any('SELECT * from public.products_search(${p_name}, ${p_code})',
         {p_name: req.query.p_name || null, p_code: req.query.p_code || null})
         .then(function (response) {
-            responseFormatter(200, {data: response, rc: 0}, req, res);
+            responseFormatter(Enums.codes.SUCCESS, {data: response, rc: 0}, req, res);
         }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
     });
 });
 
 router.get('/:p_id', function (req, res, next) {
+    requestValidator.params(productSchemas.productGet),
     db.any('SELECT * from public.product_get(${p_id})', {p_id: req.params.p_id})
         .then(function (response) {
-            responseFormatter(200, {data: response && response[0], rc: 0}, req, res);
+            responseFormatter(Enums.codes.SUCCESS, {data: response && response[0], rc: 0}, req, res);
         }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
     });
 });
 
-router.post('/invoice/create', function (req, res, next) {
+router.post('/invoice/create',
+    requestValidator.body(productSchemas.invoiceCreate),
+    function (req, res, next) {
     var invoice_json = req.body;
     invoice_json.created_date = moment().format('YYYY-MM-DD HH:mm:ss');
     db.any('SELECT * from public.invoice_create(${invoice_json})', {invoice_json: JSON.stringify(invoice_json)})
         .then(function (response) {
-            responseFormatter(200, {data: 'Ok', rc: 0}, req, res);
+            responseFormatter(Enums.codes.SUCCESS, {data: 'Ok', rc: 0}, req, res);
         }).catch(function (error) {
-        responseFormatter(500, {error: error, rc: 500}, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
     });
 });
 

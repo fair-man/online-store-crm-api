@@ -9,26 +9,29 @@ var encript = require('../../utils/encript');
 var requestValidator = require('../../utils/requestValidator');
 var responseFormatter = require('../../utils/responseFormatter');
 var userParamsSchema = require('./userSchema').userParamsSchema;
+var roleParamsSchema = require('./userSchema').roleParamsSchema;
 var userCreateSchema = require('./userSchema').userCreateSchema;
 var userUpdateSchema = require('./userSchema').userUpdateSchema;
 var moment = require('moment');
 var config = require('../../config');
 var Enums = require('../../config/enums');
 
-router.get('/by_role/:r_id', function (req, res, next) {
-  var r_id = req.params.r_id;
+router.get('/by_role/:r_id',
+    requestValidator.params(roleParamsSchema),
+    function (req, res, next) {
+      var r_id = req.params.r_id;
 
-  return db.any('SELECT * from public.users_get_by_role(${r_id})', {r_id: r_id})
-    .then(function (response) {
-      var opts = {data: response[0].users, rc: 0};
+      return db.any('SELECT * from public.users_get_by_role(${r_id})', {r_id: r_id})
+        .then(function (response) {
+          var opts = {data: response[0].users, rc: 0};
 
-      responseFormatter(200, opts, req, res);
-    }).catch(function (error) {
-      var opts = {error: error, rc: 500};
+          responseFormatter(Enums.codes.SUCCESS, opts, req, res);
+        }).catch(function (error) {
+          var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-      responseFormatter(500, opts, req, res);
-    })
-});
+          responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
+        })
+    });
 
 router.get('/:u_id',
   requestValidator.params(userParamsSchema),
@@ -39,12 +42,12 @@ router.get('/:u_id',
       .then(function (response) {
         var opts = {data: response[0].user_data, rc: 0};
 
-        responseFormatter(200, opts, req, res);
+        responseFormatter(Enums.codes.SUCCESS, opts, req, res);
       })
       .catch(function (error) {
-        var opts = {error: error, rc: 500};
+        var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-        responseFormatter(500, opts, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
       });
 });
 
@@ -78,24 +81,24 @@ router.post('/',
 
         transporter.sendMail(mailOptions, function(error, info) {
           if (error) {
-            var optsError = {error: Enums.rcs[400], rc: 400, metaError: error};
+            var optsError = {error: Enums.rcs[Enums.codes.BAD_REQUEST], rc: Enums.codes.BAD_REQUEST, metaError: error};
 
             console.log('TransporterError => ', error);
 
-            responseFormatter(400, optsError, req, res);
+            responseFormatter(Enums.codes.BAD_REQUEST, optsError, req, res);
 
           } else {
             var optsSuccess = {data: response[0].user_data, rc: 0};
 
             console.log('Message sent: %s', info.messageId);
-            responseFormatter(200, optsSuccess, req, res);
+            responseFormatter(Enums.codes.SUCCESS, optsSuccess, req, res);
           }
         });
       })
       .catch(function (error) {
-        var opts = {error: error, rc: 500};
+        var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-        responseFormatter(500, opts, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
       });
 });
 
@@ -105,9 +108,9 @@ router.post('/avatar_upload/:u_id', function (req, res, next) {
 
   req.files.file_upload.mv('./' + name, function(error) {
     if (error) {
-      var opts = {error: error, rc: 500};
+      var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-      responseFormatter(500, opts, req, res);
+      responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
     } else {
       cloudinary.uploader.upload('./' + name, {
         resource_type: "auto",
@@ -118,24 +121,24 @@ router.post('/avatar_upload/:u_id', function (req, res, next) {
       },
       function (error, result) {
         if (error) {
-          var opts = {error: error, rc: 500};
+          var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-          responseFormatter(500, opts, req, res);
+          responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
         } else {
           db.any('UPDATE public.users SET photo_src = ${src} WHERE users.id = ${u_id}', {src: result.secure_url, u_id: u_id}).then(
             function (response) {
               try {
                 fs.unlinkSync('./' + name);
-                responseFormatter(200, {data: 'Photo uploaded and drop successfully', rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: 'Photo uploaded and drop successfully', rc: 0}, req, res);
               } catch (err) {
-                responseFormatter(200, {data: 'Photo uploaded successfully', rc: 0}, req, res);
+                responseFormatter(Enums.codes.SUCCESS, {data: 'Photo uploaded successfully', rc: 0}, req, res);
               }
             }
           ).catch(
             function (error) {
-              var opts = {error: error, rc: 500};
+              var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-              responseFormatter(500, opts, req, res);
+              responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
             }
           )
         }
@@ -155,14 +158,14 @@ router.put('/:u_id',
       .then(function (response) {
         var opts = {data: response[0].user_data, rc: 0};
 
-        responseFormatter(200, opts, req, res);
+        responseFormatter(Enums.codes.SUCCESS, opts, req, res);
       })
       .catch(function (error) {
-        var opts = {error: error, rc: 500};
+        var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-        responseFormatter(500, opts, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
       });
-});
+    });
 
 router.delete('/:u_id',
   requestValidator.params(userParamsSchema),
@@ -173,12 +176,12 @@ router.delete('/:u_id',
       .then(function (response) {
         var opts = {data: {}, rc: 0};
 
-        responseFormatter(200, opts, req, res)
+        responseFormatter(Enums.codes.SUCCESS, opts, req, res)
       })
       .catch(function (error) {
-        var opts = {error: error, rc: 500};
+        var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-        responseFormatter(500, opts, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
       });
 });
 

@@ -6,7 +6,7 @@ var moment = require('moment');
 var responseFormatter = require('../../utils/responseFormatter');
 var requestValidator = require('../../utils/requestValidator');
 var providerSchemas = require('./providerSchema');
-var pgPromiseHelper = require('../../utils/pgPromiseHelper');
+var Enums = require('../../config/enums/index');
 
 router.post('/',
         requestValidator.body(providerSchemas.providerCreateSchema),
@@ -17,11 +17,11 @@ router.post('/',
             .then(function (response) {
                 var opts = {data: response[0], rc: 0};
 
-                responseFormatter(200, opts, req, res);
+                responseFormatter(Enums.codes.SUCCESS, opts, req, res);
             }).catch(function (error) {
-            var opts = {error: error, rc: 500};
+            var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-            responseFormatter(500, opts, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
         });
     });
 
@@ -37,11 +37,11 @@ router.put('/:p_id',
             .then(function (response) {
                 var opts = {data: response[0], rc: 0};
 
-                responseFormatter(200, opts, req, res);
+                responseFormatter(Enums.codes.SUCCESS, opts, req, res);
             }).catch(function (error) {
-            var opts = {error: error, rc: 500};
+            var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-            responseFormatter(500, opts, req, res);
+            responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
         });
     });
 
@@ -50,11 +50,11 @@ router.get('/names', function (req, res, next) {
         .then(function (response) {
             var opts = {data: {providers: response}, rc: 0};
 
-            responseFormatter(200, opts, req, res);
+            responseFormatter(Enums.codes.SUCCESS, opts, req, res);
         }).catch(function (error) {
-        var opts = {error: error, rc: 500};
+        var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-        responseFormatter(500, opts, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
     });
 });
 
@@ -63,11 +63,11 @@ router.get('/', function (req, res, next) {
         .then(function (response) {
             var opts = {data: {providers: response}, rc: 0};
 
-            responseFormatter(200, opts, req, res);
+            responseFormatter(Enums.codes.SUCCESS, opts, req, res);
         }).catch(function (error) {
-        var opts = {error: error, rc: 500};
+        var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-        responseFormatter(500, opts, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
     });
 });
 
@@ -78,11 +78,11 @@ router.get('/:p_id', function (req, res, next) {
         .then(function (response) {
             var opts = {data: response[0].provider_data, rc: 0};
 
-            responseFormatter(200, opts, req, res);
+            responseFormatter(Enums.codes.SUCCESS, opts, req, res);
         }).catch(function (error) {
-        var opts = {error: error, rc: 500};
+        var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-        responseFormatter(500, opts, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
     });
 });
 

@@ -27,25 +27,25 @@ router.post('/login', requestValidator.body(loginBodySchema), function (req, res
               req.session.user = user_data;
               req.session.csrf_token = csrf_token;
 
-              responseFormatter(200, opts, req, res);
+              responseFormatter(Enums.codes.SUCCESS, opts, req, res);
             }
           ).catch(
             function (error) {
-              var opts = {error: error, rc: 500};
+              var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-              responseFormatter(500, opts, req, res);
+              responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
             }
         )
       } else {
-        var opts = {error: 'Неверное имя пользователя или пароль', rc: 400};
+        var opts = {error: Enums.rcs[22], rc: Enums.codes.BAD_REQUEST};
 
-        responseFormatter(400, opts, req, res);
+        responseFormatter(Enums.codes.BAD_REQUEST, opts, req, res);
       }
     }
   ).catch(function (error) {
-    var opts = {error: error, rc: 500};
+    var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-    responseFormatter(500, opts, req, res);
+    responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
   })
 });
 
@@ -53,9 +53,9 @@ router.get('/check_auth', function (req, res, next) {
   var user = req.session.user;
 
   if (!user) {
-    var opts = {error: Enums.rcs[401], rc: 401};
+    var opts = {error: Enums.rcs[Enums.codes.NOT_AUTHORIZED], rc: Enums.codes.NOT_AUTHORIZED};
 
-    responseFormatter(401, opts, req, res);
+    responseFormatter(Enums.codes.NOT_AUTHORIZED, opts, req, res);
     return;
   }
 
@@ -66,29 +66,28 @@ router.get('/check_auth', function (req, res, next) {
           var user_data = response[0].user_data;
           user_data.csrf_token = req.session.csrf_token;
 
-          responseFormatter(200, {data: response[0].user_data, rc: 0}, req, res);
+          responseFormatter(Enums.codes.SUCCESS, {data: response[0].user_data, rc: 0}, req, res);
         } else {
-          var opts = {error: 'Неверное имя пользователя или пароль', rc: 400};
+          var opts = {error: Enums.rcs[22], rc: Enums.codes.BAD_REQUEST};
 
-          responseFormatter(400, opts, req, res);
+          responseFormatter(Enums.codes.BAD_REQUEST, opts, req, res);
         }
       }
     ).catch(
     function (error) {
-      var opts = {error: error, rc: 500};
+      var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-      responseFormatter(500, opts, req, res);
+      responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
     }
   )
 });
 
 router.post('/logout', function(req, res, next) {
   req.session.destroy(function(err) {
-    if (err) { console.log(err); }
-
     var opts = {data: 'Ok', rc: 0};
+
     res.cookie("connect.sid", "", { expires: new Date() });
-    responseFormatter(200, opts, req, res);
+    responseFormatter(Enums.codes.SUCCESS, opts, req, res);
   })
 });
 

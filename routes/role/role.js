@@ -11,6 +11,7 @@ var roleUpdateParamsSchema = require('./roleSchema').roleUpdateParamsSchema;
 var roleUpdateBodySchema = require('./roleSchema').roleUpdateBodySchema;
 var roleRemoveParamsSchema = require('./roleSchema').roleRemoveParamsSchema;
 var permission = require('../../utils/middleware/permission');
+var Enums = require('../../config/enums/index');
 
 router.get('/:r_id', requestValidator.params(roleGetSchema), function (req, res, next) {
   var r_id = req.params.r_id;
@@ -19,12 +20,12 @@ router.get('/:r_id', requestValidator.params(roleGetSchema), function (req, res,
     .then(function (response) {
       var opts = {data: {role: response[0]}, rc: 0};
 
-      responseFormatter(200, opts, req, res);
+      responseFormatter(Enums.codes.SUCCESS, opts, req, res);
     })
     .catch(function (error) {
-      var opts = {error: error, rc: 500};
+      var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-      responseFormatter(500, opts, req, res);
+      responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
     })
 });
 
@@ -33,30 +34,32 @@ router.get('/', function (req, res, next) {
     .then(function (response) {
       var opts = {data: {roles: response}, rc: 0};
 
-      responseFormatter(200, opts, req, res);
+      responseFormatter(Enums.codes.SUCCESS, opts, req, res);
     })
     .catch(function (error) {
-      var opts = {error: error, rc: 500};
+      var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-      responseFormatter(500, opts, req, res);
+      responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
     })
 });
 
-router.post('/', requestValidator.body(roleCreateSchema), function (req, res, next) {
-  var r_name = req.body.r_name;
+router.post('/',
+    requestValidator.body(roleCreateSchema),
+    function (req, res, next) {
+      var r_name = req.body.r_name;
 
-  return db.any('SELECT * FROM public.role_create(${r_name})', {r_name: r_name})
-    .then(function (response) {
-      var opts = {data: {role: response[0]}, rc: 0};
+      return db.any('SELECT * FROM public.role_create(${r_name})', {r_name: r_name})
+        .then(function (response) {
+          var opts = {data: {role: response[0]}, rc: 0};
 
-      responseFormatter(200, opts, req, res)
-    })
-    .catch(function (error) {
-      var opts = {error: error, rc: 500};
+          responseFormatter(Enums.codes.SUCCESS, opts, req, res)
+        })
+        .catch(function (error) {
+          var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-      responseFormatter(500, opts, req, res);
-    })
-});
+          responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
+        })
+    });
 
 router.put('/:r_id',
   requestValidator.params(roleUpdateParamsSchema),
@@ -69,12 +72,12 @@ router.put('/:r_id',
       .then(function (response) {
         var opts = {data: {role: response[0]}, rc: 0};
 
-        responseFormatter(200, opts, req, res)
+        responseFormatter(Enums.codes.SUCCESS, opts, req, res)
       })
       .catch(function (error) {
-        var opts = {error: error, rc: 500};
+        var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-        responseFormatter(500, opts, req, res);
+        responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
       })
 });
 
@@ -82,21 +85,21 @@ router.delete('/:r_id', requestValidator.params(roleRemoveParamsSchema), functio
   var r_id = req.params.r_id;
 
   if (!r_id) {
-    var opts = {error: 'Не передан обязательный аргумент', rc: 500};
+    var opts = {error: 'Не передан обязательный аргумент', rc: Enums.codes.BACKEND_ERROR};
 
-    return responseFormatter(500, opts, req, res);
+    return responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
   }
 
   return db.any('SELECT * FROM public.role_remove($(r_id))', {r_id: r_id})
     .then(function (response) {
       var opts = {data: {}, rc: 0};
 
-      responseFormatter(200, opts, req, res)
+      responseFormatter(Enums.codes.SUCCESS, opts, req, res)
     })
     .catch(function (error) {
-      var opts = {error: error, rc: 500};
+      var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-      responseFormatter(500, opts, req, res);
+      responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
     })
 });
 

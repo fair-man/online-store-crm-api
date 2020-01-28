@@ -4,6 +4,10 @@ var userParamsSchema = {
   u_id: Joi.string().required().regex(/^\d+$/)
 };
 
+var roleParamsSchema = {
+  r_id: Joi.number().required()
+};
+
 var userCreateSchema = {
   user_json: {
     user_data: {
@@ -92,6 +96,7 @@ var userUpdateSchema = {
 
 module.exports = {
   userParamsSchema: userParamsSchema,
+  roleParamsSchema: roleParamsSchema,
   userCreateSchema: userCreateSchema,
   userUpdateSchema: userUpdateSchema
 };

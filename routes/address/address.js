@@ -3,21 +3,20 @@ var router = express.Router();
 
 var db = require('../../libs/db-connect');
 var responseFormatter = require('../../utils/responseFormatter/index');
-var requestValidator = require('../../utils/requestValidator/index');
 
-var permission = require('../../utils/middleware/permission');
+var Enums = require('../../config/enums/index');
 
 router.get('/street_types', function (req, res, next) {
   return db.any('SELECT * from public.street_types')
     .then(function (response) {
       var opts = {data: {street_types: response}, rc: 0};
 
-      responseFormatter(200, opts, req, res);
+      responseFormatter(Enums.codes.SUCCESS, opts, req, res);
     })
     .catch(function (error) {
-      var opts = {error: error, rc: 500};
+      var opts = {error: error, rc: Enums.codes.BACKEND_ERROR};
 
-      responseFormatter(500, opts, req, res);
+      responseFormatter(Enums.codes.BACKEND_ERROR, opts, req, res);
     })
 });
 
