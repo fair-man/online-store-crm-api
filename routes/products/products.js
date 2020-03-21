@@ -201,6 +201,19 @@ router.post('/create',
         });
     });
 
+router.post('/update/:p_id',
+    requestValidator.body(productSchemas.productCreateSchema),
+    function (req, res, next) {
+        db.any('SELECT * from public.product_update(${pt_id}, ${product_json})', {
+            pt_id: req.params.p_id,
+            product_json: JSON.stringify(req.body.product_json)
+        }).then(function (response) {
+                responseFormatter(Enums.codes.SUCCESS, {data: 'Ok', rc: 0}, req, res);
+            }).catch(function (error) {
+            responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
+        });
+    });
+
 router.get('/search', function (req, res, next) {
     db.any('SELECT * from public.products_search(${p_name}, ${p_code})',
         {p_name: req.query.p_name || null, p_code: req.query.p_code || null})
