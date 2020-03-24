@@ -3,7 +3,9 @@ var router = express.Router();
 var db = require('../../libs/db-connect');
 var productSchemas = require('./productsSchema');
 var moment = require('moment');
+var async = require("async");
 
+var cloudinary = require('../../libs/cloudinary-file-upload');
 var responseFormatter = require('../../utils/responseFormatter');
 var requestValidator = require('../../utils/requestValidator');
 var Enums = require('../../config/enums/index');
@@ -213,6 +215,67 @@ router.post('/update/:p_id',
             responseFormatter(Enums.codes.BACKEND_ERROR, {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
         });
     });
+
+router.post('/:p_id/images/add', function (req, res, next) {
+    if (req.files && req.files.files && req.params.p_id) {
+        var p_id = req.params.p_id;
+        var mainFile = req.files.files.forEach ? req.files.files[0] : req.files.files;
+        var otherFiles = req.files.files.forEach && req.files.files.length > 1 ? req.files.files.slice(1) : [];
+        var arrImages = [
+            uploadImage.bind(this, mainFile, 1)
+        ];
+
+        otherFiles.forEach(function (item) {
+            arrImages.push(uploadImage.bind(this, item, 0));
+        });
+
+        async.series(arrImages, function (err, results) {
+            if (err) {
+                responseFormatter(Enums.codes.BACKEND_ERROR,
+                    {error: err, rc: Enums.codes.BACKEND_ERROR}, req, res);
+            } else {
+                var images = results.map(function (file, index) {
+                    return {
+                        is_main: +(index === 0),
+                        image_src: file.secure_url
+                    }
+                });
+
+                db.any('SELECT * from public.product_images_add(${pt_id}, ${images})', {
+                    pt_id: p_id,
+                    images: JSON.stringify(images)
+                }).then(function (response) {
+                    responseFormatter(Enums.codes.SUCCESS, {data: 'Ok', rc: 0}, req, res);
+                }).catch(function (error) {
+                    responseFormatter(Enums.codes.BACKEND_ERROR,
+                        {error: error, rc: Enums.codes.BACKEND_ERROR}, req, res);
+                })
+            }
+        })
+    }
+
+    function uploadImage(file, isMain, callback) {
+        var name = 'product_' + p_id + '.' + file.name.split('.')[1];
+
+        file.mv('./' + name, function(error) {
+            if (error) {
+                console.log(error);
+            } else {
+                cloudinary.uploader.upload('./' + name, {
+                    resource_type: "auto",
+                    folder: "online-store/products/" + p_id + '/',
+                    public_id: 'product_' + p_id + '_' + file.name.split('.')[0]
+                }, function (error, result) {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, result);
+                    }
+                });
+            }
+        })
+    }
+});
 
 router.get('/search', function (req, res, next) {
     db.any('SELECT * from public.products_search(${p_name}, ${p_code})',
