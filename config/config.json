@@ -19,7 +19,8 @@
       "path": "/",
       "httpOnly": true,
       "maxAge": null,
-      "domain": ".herokuapp.com"
+      "domain": ".herokuapp.com",
+      "sameSite": "strict"
     }
   },
   "cloudinary": {
