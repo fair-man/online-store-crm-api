@@ -19,7 +19,8 @@
       "path": "/",
       "httpOnly": true,
       "maxAge": null,
-      "domain": "https://online-store-admin.herokuapp.com"
+      "domain": "https://online-store-admin.herokuapp.com",
+      "sameSite": "none"
     }
   },
   "cloudinary": {
