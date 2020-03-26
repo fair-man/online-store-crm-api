@@ -22,7 +22,16 @@ var products = require('./routes/products/products');
 
 var app = express();
 
-app.use(fileUpload());
+var corsOptions = {
+  origin: 'https://online-store-admin.herokuapp.com',
+  // origin: 'http://localhost:4500',
+  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+  allowedHeaders: ['X-Requested-With', 'content-type', 'x-csrftoken'],
+  credentials: true,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 app.use(session({
   cookie: config.get('session.cookie'),
   resave: true,
@@ -31,37 +40,13 @@ app.use(session({
   store: new pgSession()
 }));
 
-app.use(function (req, res, next) {
-  var origins = [];
-  var origin = process.env.NODE_ENV === 'production' ? req.get('origin') : req.get('origin') || req.get('x-origin-domain');
-
-  if (process.env.ALLOW_ORIGIN_ADMIN_DEV) {origins.push(process.env.ALLOW_ORIGIN_ADMIN_DEV);}
-  if (process.env.ALLOW_ORIGIN_ADMIN_PROD) {origins.push(process.env.ALLOW_ORIGIN_ADMIN_PROD);}
-  // if (process.env.ALLOW_ORIGIN_WEB_DEV) {origins.push(process.env.ALLOW_ORIGIN_WEB_DEV);}
-  // if (process.env.ALLOW_ORIGIN_WEB_PROD) {origins.push(process.env.ALLOW_ORIGIN_WEB_PROD);}
-
-  if (origins.indexOf(origin) > -1) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,x-csrftoken,x-origin-domain');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-  }
-
-  'OPTIONS' === req.method ? res.send(origins.indexOf(origin) > -1 ? res.send(200) : res.send(403)) : next();
-});
-
-var corsOptions = {
-  origin: 'https://online-store-admin.herokuapp.com/',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-
-app.use(cors(corsOptions));
 app.use(authorize);
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(fileUpload());
 
 router.use('/auth', authRouter);
 router.use('/roles', rolesRouter);
