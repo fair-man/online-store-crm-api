@@ -17,10 +17,10 @@
     "secret": "",
     "cookie": {
       "path": "/",
-      "httpOnly": true,
+
       "maxAge": null,
-      "domain": ".herokuapp.com",
-      "sameSite": "strict"
+      "domain": ".herokuapp.com"
+
     }
   },
   "cloudinary": {
