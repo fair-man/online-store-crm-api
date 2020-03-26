@@ -52,6 +52,9 @@ router.post('/login', requestValidator.body(loginBodySchema), function (req, res
 router.get('/check_auth', function (req, res, next) {
   var user = req.session.user;
 
+  console.log('SESSION => ', req.session);
+  console.log('USER => ' ,user);
+
   if (!user) {
     var opts = {error: Enums.rcs[Enums.codes.NOT_AUTHORIZED], rc: Enums.codes.NOT_AUTHORIZED};
 
