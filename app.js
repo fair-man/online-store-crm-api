@@ -1,6 +1,6 @@
 require('dotenv').config();
 var express = require('express');
-var path = require('path');
+var cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var router = express.Router();
@@ -11,6 +11,7 @@ var session = require('express-session');
 var pgSession = require('connect-pg-simple')(session);
 
 var authorize = require('./utils/middleware/authentication');
+var corsAccess = require('./utils/middleware/cors');
 
 var authRouter = require('./routes/auth/auth');
 var rolesRouter = require('./routes/role/role');
@@ -49,6 +50,12 @@ app.use(function (req, res, next) {
   'OPTIONS' === req.method ? res.send(origins.indexOf(origin) > -1 ? res.send(200) : res.send(403)) : next();
 });
 
+var corsOptions = {
+  origin: 'https://online-store-admin.herokuapp.com/',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 app.use(authorize);
 
 app.use(logger('dev'));
