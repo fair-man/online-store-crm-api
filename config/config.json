@@ -18,7 +18,8 @@
     "cookie": {
       "path": "/",
       "httpOnly": true,
-      "maxAge": null
+      "maxAge": null,
+      "domain": "https://online-store-admin.herokuapp.com"
     }
   },
   "cloudinary": {
