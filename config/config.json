@@ -17,10 +17,8 @@
     "secret": "",
     "cookie": {
       "path": "/",
-
-      "maxAge": null,
-      "domain": ".herokuapp.com"
-
+      "httpOnly": true,
+      "maxAge": null
     }
   },
   "cloudinary": {
