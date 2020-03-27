@@ -19,8 +19,7 @@
       "path": "/",
       "httpOnly": true,
       "maxAge": null,
-      "secure": true,
-      "sameSite": "none"
+      "sameSite": "lax"
     }
   },
   "cloudinary": {
