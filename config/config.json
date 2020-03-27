@@ -20,7 +20,8 @@
       "httpOnly": true,
       "maxAge": null,
       "secure": true,
-      "sameSite": "none"
+      "sameSite": "none",
+      "domain": "online-store-crm-api.herokuapp.com"
     }
   },
   "cloudinary": {
