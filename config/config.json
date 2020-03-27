@@ -19,7 +19,6 @@
       "path": "/",
       "httpOnly": true,
       "maxAge": null,
-      "secure": false,
       "sameSite": "lax"
     }
   },
