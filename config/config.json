@@ -1,5 +1,5 @@
 {
-  "PORT": 3333,
+  "PORT": 3000,
   "postresql": {
     "uri": ""
   },
@@ -20,7 +20,7 @@
       "httpOnly": true,
       "maxAge": null,
       "secure": false,
-      "sameSite": true
+      "sameSite": "none"
     }
   },
   "cloudinary": {

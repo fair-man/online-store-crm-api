@@ -33,7 +33,7 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(session({
-  cookie: config.get('session.cookie'),
+  cookie: config.get('session:cookie'),
   resave: true,
   saveUninitialized: false,
   secret: config.get('session:secret'),
