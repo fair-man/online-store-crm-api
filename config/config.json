@@ -20,7 +20,7 @@
       "httpOnly": true,
       "maxAge": null,
       "secure": false,
-      "sameSite": "none"
+      "sameSite": false
     }
   },
   "cloudinary": {
