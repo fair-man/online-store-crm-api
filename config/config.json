@@ -20,7 +20,8 @@
       "httpOnly": true,
       "maxAge": null,
       "secure": true,
-      "sameSite": "none"
+      "sameSite": "none",
+      "domain": ".herokuapp.com"
     }
   },
   "cloudinary": {
