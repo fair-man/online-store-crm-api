@@ -19,7 +19,6 @@
       "path": "/",
       "httpOnly": true,
       "maxAge": null,
-      "secure": true,
       "sameSite": "none",
       "domain": "online-store-crm-api.herokuapp.com"
     }
