@@ -40,7 +40,6 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 app.use(authorize);
 
 app.use(logger('dev'));
