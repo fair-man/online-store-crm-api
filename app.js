@@ -31,12 +31,12 @@ app.use(session({
 }));
 
 var corsOptions = {
-  // origin: 'https://online-store-admin.herokuapp.com',
-  origin: 'http://app.loc:4445',
-  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-  allowedHeaders: ['X-Requested-With', 'content-type', 'x-csrftoken'],
-  credentials: true,
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+    origin: 'https://online-store-admin.herokuapp.com',
+    // origin: 'http://app.loc:4445',
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+    allowedHeaders: ['X-Requested-With', 'content-type', 'x-csrftoken'],
+    credentials: true,
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 app.use(cors(corsOptions));
