@@ -22,17 +22,6 @@ var products = require('./routes/products/products');
 
 var app = express();
 
-var corsOptions = {
-  origin: 'https://online-store-admin.herokuapp.com',
-  // origin: 'http://localhost:4500',
-  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-  allowedHeaders: ['X-Requested-With', 'content-type', 'x-csrftoken'],
-  credentials: true,
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-
-app.use(cors(corsOptions));
-
 app.use(session({
   cookie: config.get('session:cookie'),
   resave: true,
@@ -40,6 +29,17 @@ app.use(session({
   secret: config.get('session:secret'),
   store: new pgSession()
 }));
+
+var corsOptions = {
+  // origin: 'https://online-store-admin.herokuapp.com',
+  origin: 'http://app.loc:4445',
+  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+  allowedHeaders: ['X-Requested-With', 'content-type', 'x-csrftoken'],
+  credentials: true,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 app.use(authorize);
 
